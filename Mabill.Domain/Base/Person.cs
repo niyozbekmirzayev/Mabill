@@ -1,10 +1,15 @@
-﻿namespace Mabill.Domain.Base
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Mabill.Domain.Base
 {
     public class Person : BaseEntity
     {
+        [Required]
         public string FirsName { get; set; }
+        [Required]
         public string LastName { get; set; }
         public string Email { get; set; }
+        [Required]
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
     }

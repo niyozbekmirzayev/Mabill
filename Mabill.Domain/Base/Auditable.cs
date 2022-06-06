@@ -1,11 +1,14 @@
 ﻿using Mabill.Domain.Enums;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mabill.Domain.Base
 {
     public class Auditable : BaseEntity
     {
+        [Required]
         ObjectStatus Status { get; set; }
+        [Required]
         public DateTime CreatedDate { get; set; }
         public DateTime? DeletedDate { get; set; } = null;
         public DateTime? LastModificatedDate { get; set; } = null;
