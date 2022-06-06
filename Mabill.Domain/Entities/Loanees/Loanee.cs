@@ -1,6 +1,9 @@
 ﻿using Mabill.Domain.Base;
+using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.Loans;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mabill.Domain.Entities.Loanees
 {
@@ -14,6 +17,10 @@ namespace Mabill.Domain.Entities.Loanees
         public virtual ICollection<Loan> Loans { get; set; }
         public string Description { get; set; }
         public decimal SumOfLoans { get; set; }
+        public decimal AmountOfPaymet { get; set; }
         public decimal Balance { get; set; }
+        [ForeignKey(nameof(Journal))]
+        public Guid JournalId { get; set; }
+        public Journal Journal { get; set; }
     }
 }

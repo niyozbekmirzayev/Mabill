@@ -12,6 +12,7 @@ namespace Mabill.Domain.Entities.Organizations
         public Organization()
         {
             Journals = new List<Journal>();
+            Admins = new List<Admin>();
         }
 
         public virtual ICollection<Journal> Journals { get; set; }
@@ -19,5 +20,7 @@ namespace Mabill.Domain.Entities.Organizations
         [ForeignKey(nameof(Owner))]
         public Guid OwnerId { get; set; }
         public Admin Owner { get; set; }
+        public decimal SumOfGivenLoans { get; set; }
+        public virtual ICollection<Admin> Admins { get; set; }
     }
 }
