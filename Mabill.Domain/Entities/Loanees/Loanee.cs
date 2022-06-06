@@ -13,5 +13,7 @@ namespace Mabill.Domain.Entities.Loanees
 
         public virtual ICollection<Loan> Loans { get; set; }
         public string Description { get; set; }
+        public decimal SumOfLoans { get; set; }
+        public decimal Balance { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace Mabill.Domain.Entities.Organizations
         {
             Journals = new List<Journal>();
         }
-        
+
         public virtual ICollection<Journal> Journals { get; set; }
         public string Description { get; set; }
         [ForeignKey(nameof(Owner))]
