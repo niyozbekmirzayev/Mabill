@@ -21,7 +21,7 @@ namespace Mabill.Domain.Entities.Organizations
 
         public string Description { get; set; }
         public decimal SumOfGivenLoans { get; set; }
-        
+
         public virtual ICollection<Admin> Admins { get; set; }
         public virtual ICollection<Journal> Journals { get; set; }
 

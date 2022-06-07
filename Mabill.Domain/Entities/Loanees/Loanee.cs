@@ -14,17 +14,17 @@ namespace Mabill.Domain.Entities.Loanees
         {
             this.Loans = new List<Loan>();
         }
-        
+
         public virtual ICollection<Loan> Loans { get; set; }
-        
+
         public string Description { get; set; }
         public decimal SumOfLoans { get; set; }
         public decimal AmountOfPaymet { get; set; }
         public decimal Balance { get; set; }
-        
+
         [ForeignKey(nameof(AddedBy))]
         public Guid AddedById { get; set; }
-        public virtual Admin AddedBy { get; set; } 
+        public virtual Admin AddedBy { get; set; }
 
         [ForeignKey(nameof(Journal))]
         public Guid JournalId { get; set; }

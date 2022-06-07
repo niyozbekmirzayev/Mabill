@@ -10,10 +10,10 @@ namespace Mabill.Domain.Entities.Journals
     {
         [Required]
         public string Title { get; set; }
-        
+
         public string Description { get; set; }
         public decimal SumOfGivenLoans { get; set; }
-        
+
         [ForeignKey(nameof(Organization))]
         public Guid OrganizationId { get; set; }
         public virtual Organization Organization { get; set; }

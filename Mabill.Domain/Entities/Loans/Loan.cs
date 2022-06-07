@@ -10,19 +10,19 @@ namespace Mabill.Domain.Entities.Loans
     public class Loan : Auditable
     {
         public string Description { get; set; }
-        
+
         [Required]
         public decimal Amount { get; set; }
-        
+
         [Required]
         public bool IsPaid { get; set; } = false;
-        
+
         public DateTime Deadline { get; set; }
-        
+
         [ForeignKey(nameof(Loanee))]
         public Guid LoaneeId { get; set; }
         public virtual Loanee Loanee { get; set; }
-        
+
         [ForeignKey(nameof(GivenBy))]
         public Guid GivenById { get; set; }
         public virtual Admin GivenBy { get; set; }
@@ -30,6 +30,6 @@ namespace Mabill.Domain.Entities.Loans
         [ForeignKey(nameof(TakeBy))]
         public Guid? TakenById { get; set; } = null;
         public virtual Admin TakeBy { get; set; }
-       
+
     }
 }
