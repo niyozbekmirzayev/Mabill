@@ -1,5 +1,7 @@
 ﻿using Mabill.Data.IRepositories;
+using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Organizations;
+using Mabill.Domain.Enums;
 using Mabill.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,9 +19,29 @@ namespace Mabill.Service.Services
             this.organizationRepository = organizationRepository;
         }
 
-        public Task<Organization> AddAsync(Organization organization)
+        public Task<BaseResponse<Organization>> AddAsync(Organization organization)
         {
-            throw new NotImplementedException();
+            var response = new BaseResponse<Organization>();
+
+            #region Error handling
+            if (organization == null) 
+            {
+                response.Error = new BaseError(401, "Invalid data");
+
+                return Task.FromResult(response);
+            }
+
+            var exsistOrganization = organizationRepository.GetAsync(o => o.Status != ObjectStatus.Deleted &&
+                                                                          o.Name == organization.Name);
+
+            if(exsistOrganization != null) 
+            {
+                response.Error = new BaseError(405, "Name of this organization already exsists");
+
+                return Task.FromResult(response);
+            }
+
+            #endregion
         }
 
         public Task<bool> DeleteAsync(Guid id)
@@ -27,17 +49,17 @@ namespace Mabill.Service.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Organization> GetAll(Expression<Func<bool, Organization>> expression = null)
+        public IEnumerable<BaseResponse<Organization>> GetAll(Expression<Func<bool, Organization>> expression = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Organization> GetAsync(Expression<Func<bool, Organization>> expression)
+        public Task<BaseResponse<Organization>> GetAsync(Expression<Func<bool, Organization>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Organization> UpdateAysnc(Organization organization)
+        public Task<BaseResponse<Organization>> UpdateAysnc(Organization organization)
         {
             throw new NotImplementedException();
         }

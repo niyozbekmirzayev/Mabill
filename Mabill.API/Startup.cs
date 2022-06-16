@@ -29,6 +29,8 @@ namespace Mabill.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mabill.API", Version = "v1" });
             });
 
+            services.AddHttpContextAccessor();
+
             // Registring connection string
             services.AddDbContext<MabillDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("MabillConnectionString")));
 
@@ -39,6 +41,8 @@ namespace Mabill.API
             services.AddCustomService();
 
             services.AddControllers().AddNewtonsoftJson();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
