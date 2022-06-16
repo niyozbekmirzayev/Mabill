@@ -21,14 +21,17 @@ namespace Mabill.Domain.Entities.Loans
 
         [ForeignKey(nameof(Loanee))]
         public Guid LoaneeId { get; set; }
+        [NotMapped]
         public virtual Loanee Loanee { get; set; }
 
         [ForeignKey(nameof(GivenBy))]
         public Guid GivenById { get; set; }
+        [NotMapped]
         public virtual Admin GivenBy { get; set; }
 
         [ForeignKey(nameof(TakeBy))]
         public Guid? TakenById { get; set; } = null;
+        [NotMapped]
         public virtual Admin TakeBy { get; set; }
 
     }

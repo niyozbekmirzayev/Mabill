@@ -2,10 +2,10 @@
 
 namespace Mabill.Domain.Base
 {
-    public class Person : BaseEntity
+    public class Person : Auditable
     {
         [Required]
-        public string FirsName { get; set; }
+        public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
         public string Email { get; set; }

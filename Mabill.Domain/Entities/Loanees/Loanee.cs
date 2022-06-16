@@ -24,10 +24,12 @@ namespace Mabill.Domain.Entities.Loanees
 
         [ForeignKey(nameof(AddedBy))]
         public Guid AddedById { get; set; }
+        [NotMapped]
         public virtual Admin AddedBy { get; set; }
 
         [ForeignKey(nameof(Journal))]
         public Guid JournalId { get; set; }
+        [NotMapped]
         public virtual Journal Journal { get; set; }
     }
 }

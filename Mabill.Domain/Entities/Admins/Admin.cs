@@ -22,6 +22,7 @@ namespace Mabill.Domain.Entities.Admins
 
         [ForeignKey(nameof(Organization))]
         public Guid OrganizationId { get; set; }
+        [NotMapped]
         public virtual Organization Organization { get; set; }
     }
 }

@@ -24,22 +24,24 @@ namespace Mabill.Service.Services
             var response = new BaseResponse<Organization>();
 
             #region Error handling
-            if (organization == null) 
-            {
-                response.Error = new BaseError(401, "Invalid data");
+            /* if (organization == null) 
+             {
+                 response.Error = new BaseError(401, "Invalid data");
 
-                return Task.FromResult(response);
-            }
+                 return Task.FromResult(response);
+             }
 
-            var exsistOrganization = organizationRepository.GetAsync(o => o.Status != ObjectStatus.Deleted &&
-                                                                          o.Name == organization.Name);
+             var exsistOrganization = organizationRepository.GetAsync(o => o.Status != ObjectStatus.Deleted &&
+                                                                           o.Name == organization.Name);
 
-            if(exsistOrganization != null) 
-            {
-                response.Error = new BaseError(405, "Name of this organization already exsists");
+             if(exsistOrganization != null) 
+             {
+                 response.Error = new BaseError(405, "Name of this organization already exsists");
 
-                return Task.FromResult(response);
-            }
+                 return Task.FromResult(response);
+             }*/
+
+            throw new NotImplementedException();
 
             #endregion
         }
