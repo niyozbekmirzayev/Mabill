@@ -3,6 +3,7 @@ using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Organizations;
 using Mabill.Domain.Enums;
 using Mabill.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -13,10 +14,12 @@ namespace Mabill.Service.Services
     public class OrgnizationService : IOrganizationService
     {
         private readonly IOrganizationRepository organizationRepository;
+        private readonly IHttpContextAccessor httpContext;
 
-        public OrgnizationService(IOrganizationRepository organizationRepository)
+        public OrgnizationService(IOrganizationRepository organizationRepository, IHttpContextAccessor httpContext)
         {
             this.organizationRepository = organizationRepository;
+            this.httpContext = httpContext;
         }
 
         public Task<BaseResponse<Organization>> AddAsync(Organization organization)
@@ -24,25 +27,24 @@ namespace Mabill.Service.Services
             var response = new BaseResponse<Organization>();
 
             #region Error handling
-            /* if (organization == null) 
-             {
-                 response.Error = new BaseError(401, "Invalid data");
+            if (organization == null)
+            {
+                response.Error = new BaseError(401, "Invalid data");
 
-                 return Task.FromResult(response);
-             }
+                return Task.FromResult(response);
+            }
 
-             var exsistOrganization = organizationRepository.GetAsync(o => o.Status != ObjectStatus.Deleted &&
-                                                                           o.Name == organization.Name);
+            var exsistOrganization = organizationRepository.GetAsync(o => o.Status != ObjectStatus.Deleted &&
+                                                                          o.Name == organization.Name);
 
-             if(exsistOrganization != null) 
-             {
-                 response.Error = new BaseError(405, "Name of this organization already exsists");
+            if (exsistOrganization != null)
+            {
+                response.Error = new BaseError(405, "Name of this organization already exsists");
 
-                 return Task.FromResult(response);
-             }*/
+                return Task.FromResult(response);
+            }
 
-            throw new NotImplementedException();
-
+            throw new NotImplementedException();            
             #endregion
         }
 

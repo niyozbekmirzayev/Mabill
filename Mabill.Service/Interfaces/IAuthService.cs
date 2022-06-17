@@ -1,4 +1,4 @@
-﻿using Mabill.Domain.Entities.Admins;
+﻿using Mabill.Domain.Entities.Staffs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace Mabill.Service.Interfaces
 {
     public interface IAuthService
     {
-        string GenerateToken(Admin admin);
+        string GenerateToken(Staff staff);
     }
 }

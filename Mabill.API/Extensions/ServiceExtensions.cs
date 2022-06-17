@@ -13,7 +13,7 @@ namespace Mabill.API.Extensions
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IOrganizationService, OrgnizationService>();
 
-            services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IStaffRepository, StaffRepository>();
 
             services.AddScoped<IAuthService, AuthService>();
         }

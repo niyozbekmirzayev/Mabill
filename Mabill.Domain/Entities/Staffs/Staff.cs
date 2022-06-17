@@ -5,9 +5,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mabill.Domain.Entities.Admins
+namespace Mabill.Domain.Entities.Staffs
 {
-    public class Admin : Person
+    public class Staff : Person
     {
         [Required]
         public string Username { get; set; }
@@ -16,7 +16,7 @@ namespace Mabill.Domain.Entities.Admins
         public string Password { get; set; }
 
         [Required]
-        public AdminRoles Role { get; set; }
+        public StaffRoles Role { get; set; }
 
         public decimal SumOfGivenLoans { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using Mabill.Domain.Base;
-using Mabill.Domain.Entities.Admins;
 using Mabill.Domain.Entities.Loanees;
+using Mabill.Domain.Entities.Staffs;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,12 +27,12 @@ namespace Mabill.Domain.Entities.Loans
         [ForeignKey(nameof(GivenBy))]
         public Guid GivenById { get; set; }
         [NotMapped]
-        public virtual Admin GivenBy { get; set; }
+        public virtual Staff GivenBy { get; set; }
 
         [ForeignKey(nameof(TakeBy))]
         public Guid? TakenById { get; set; } = null;
         [NotMapped]
-        public virtual Admin TakeBy { get; set; }
+        public virtual Staff TakeBy { get; set; }
 
     }
 }
