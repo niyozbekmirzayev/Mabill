@@ -1,6 +1,6 @@
 ﻿namespace Mabill.Domain.Enums
 {
-    public enum StaffRoles
+    public enum StaffRole
     {
         Owner = 1,
         Manager,

@@ -16,7 +16,7 @@ namespace Mabill.Domain.Entities.Staffs
         public string Password { get; set; }
 
         [Required]
-        public StaffRoles Role { get; set; }
+        public StaffRole Role { get; set; }
 
         public decimal SumOfGivenLoans { get; set; }
 

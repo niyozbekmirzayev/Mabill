@@ -1,14 +1,12 @@
 ﻿using Mabill.Domain.Entities.Staffs;
 using Mabill.Service.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Mabill.Service.Services
 {
@@ -17,7 +15,7 @@ namespace Mabill.Service.Services
         private IConfiguration config;
 
         public AuthService(IConfiguration config) => this.config = config;
-        
+
         public string GenerateToken(Staff staff)
         {
             var claims = new List<Claim>
@@ -25,7 +23,7 @@ namespace Mabill.Service.Services
                 new Claim("Id", staff.Id.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, staff.Username),
                 new Claim(ClaimTypes.Email, staff.Email),
-                new Claim("PhoneNumber", staff.PhoneNumber),
+                new Claim(ClaimTypes.MobilePhone, staff.PhoneNumber),
                 new Claim(ClaimTypes.Role, staff.Role.ToString()),
                 new Claim("FirstName", staff.FirstName),
                 new Claim("LastName", staff.LastName),

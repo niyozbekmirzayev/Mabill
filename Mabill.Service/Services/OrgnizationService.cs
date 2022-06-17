@@ -44,7 +44,7 @@ namespace Mabill.Service.Services
                 return Task.FromResult(response);
             }
 
-            throw new NotImplementedException();            
+            throw new NotImplementedException();
             #endregion
         }
 
