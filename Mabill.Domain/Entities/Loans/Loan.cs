@@ -2,6 +2,7 @@
 using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.Loanees;
 using Mabill.Domain.Entities.Users;
+using Mabill.Domain.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,10 @@ namespace Mabill.Domain.Entities.Loans
 
         [Required]
         public decimal Amount { get; set; }
+
+        public Currency? CurrencyType { get; set; }
+
+        public string CustomCurrencyType { get; set; }
 
         [Required]
         public bool IsPaid { get; set; } = false;
