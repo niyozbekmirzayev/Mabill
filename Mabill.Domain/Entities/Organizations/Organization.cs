@@ -1,6 +1,6 @@
 ﻿using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Journals;
-using Mabill.Domain.Entities.Staffs;
+using Mabill.Domain.Entities.Users;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,7 +11,7 @@ namespace Mabill.Domain.Entities.Organizations
         public Organization()
         {
             Journals = new List<Journal>();
-            Staffs = new List<Staff>();
+            Staffs = new List<User>();
         }
 
         [Required]
@@ -20,7 +20,7 @@ namespace Mabill.Domain.Entities.Organizations
         public string Description { get; set; }
         public decimal SumOfGivenLoans { get; set; }
 
-        public virtual ICollection<Staff> Staffs { get; set; }
+        public virtual ICollection<User> Staffs { get; set; }
         public virtual ICollection<Journal> Journals { get; set; }
     }
 }

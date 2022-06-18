@@ -1,5 +1,5 @@
 ﻿using Mabill.Domain.Enums;
-using Mabill.Service.Dtos.Staffs;
+using Mabill.Service.Dtos.Users;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Security.Claims;
@@ -15,21 +15,20 @@ namespace Mabill.Service.Helpers
             this.contextAccessor = contextAccessor;
         }
 
-        public StaffFromClaimsDto GetCurrentStaff()
+        public UserFromClaimsDto GetCurrentUser()
         {
-            var user = contextAccessor.HttpContext.User;
-            StaffFromClaimsDto staff = new StaffFromClaimsDto();
+            var userInfo = contextAccessor.HttpContext.User;
+            UserFromClaimsDto user = new UserFromClaimsDto();
 
-            staff.Id = Guid.Parse(user.FindFirst("Id").Value);
-            staff.Username = user.FindFirst(ClaimTypes.NameIdentifier).Value;
-            staff.Email = user.FindFirst(ClaimTypes.Email).Value;
-            staff.PhoneNumber = user.FindFirst(ClaimTypes.MobilePhone).Value;
-            Enum.TryParse(user.FindFirst(ClaimTypes.Role).Value, out StaffRole role);
-            staff.Role = role;
-            staff.FirstName = user.FindFirst("FirstName").Value;
-            staff.LastName = user.FindFirst("LastName").Value;
+            user.Id = Guid.Parse(userInfo.FindFirst("Id").Value);
+            user.Username = userInfo.FindFirst(ClaimTypes.NameIdentifier).Value;
+            user.PhoneNumber = userInfo.FindFirst(ClaimTypes.MobilePhone).Value;
+            Enum.TryParse(userInfo.FindFirst(ClaimTypes.Role).Value, out StaffRole role);
+            user.Role = role;
+            user.FirstName = userInfo.FindFirst("FirstName").Value;
+            user.LastName = userInfo.FindFirst("LastName").Value;
 
-            return staff;
+            return user;
         }
 
     }

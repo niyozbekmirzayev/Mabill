@@ -1,9 +1,9 @@
-﻿using Mabill.Domain.Entities.Staffs;
+﻿using Mabill.Domain.Entities.Users;
 
 namespace Mabill.Service.Interfaces
 {
     public interface IAuthService
     {
-        string GenerateToken(Staff staff);
+        string GenerateToken(User user);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Mabill.Domain.Entities.Staffs;
+﻿using Mabill.Domain.Entities.Users;
 using Mabill.Service.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -16,17 +16,17 @@ namespace Mabill.Service.Services
 
         public AuthService(IConfiguration config) => this.config = config;
 
-        public string GenerateToken(Staff staff)
+        public string GenerateToken(User user)
         {
             var claims = new List<Claim>
             {
-                new Claim("Id", staff.Id.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, staff.Username),
-                new Claim(ClaimTypes.Email, staff.Email),
-                new Claim(ClaimTypes.MobilePhone, staff.PhoneNumber),
-                new Claim(ClaimTypes.Role, staff.Role.ToString()),
-                new Claim("FirstName", staff.FirstName),
-                new Claim("LastName", staff.LastName),
+                new Claim("Id", user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Username),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                new Claim("FirstName", user.FirstName),
+                new Claim("LastName", user.LastName),
             };
 
             var issuer = config.GetSection("JWT:Issuer").Value;

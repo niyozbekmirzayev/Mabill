@@ -14,24 +14,24 @@ namespace Mabill.API.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService authService;
-        private readonly IStaffRepository staffRepository;
-        public AuthController(IAuthService authService, IStaffRepository staffRepository)
+        private readonly IUserRepository userRepository;
+        public AuthController(IAuthService authService, IUserRepository userRepository)
         {
             this.authService = authService;
-            this.staffRepository = staffRepository;
+            this.userRepository = userRepository;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> CreateToken([FromBody] LoginDto loginParams)
         {
-            var staff = await staffRepository.GetAsync(staff => staff.Username == loginParams.Username &&
-                                                       staff.Password == loginParams.Password.EncodeInSha256() &&
-                                                       staff.Status != ObjectStatus.Deleted);
+            var user = await userRepository.GetAsync(user => user.Username == loginParams.Username &&
+                                                       user.Password == loginParams.Password.EncodeInSha256() &&
+                                                       user.Status != ObjectStatus.Deleted);
 
-            if (staff is null) return NotFound("Login or password did not match");
+            if (user is null) return NotFound("Login or password did not match");
 
-            string token = authService.GenerateToken(staff);
+            string token = authService.GenerateToken(user);
 
             return Ok(token);
         }

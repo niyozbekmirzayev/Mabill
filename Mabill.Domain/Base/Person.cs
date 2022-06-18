@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mabill.Domain.Base
 {
@@ -12,5 +13,6 @@ namespace Mabill.Domain.Base
         [Required]
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
+        public DateTime? BrithDate { get; set; }
     }
 }
