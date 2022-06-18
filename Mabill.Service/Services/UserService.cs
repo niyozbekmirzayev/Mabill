@@ -8,9 +8,7 @@ using Mabill.Service.Extensions;
 using Mabill.Service.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mabill.Service.Services
@@ -33,7 +31,7 @@ namespace Mabill.Service.Services
             if (user == null)
             {
                 response.Error = new BaseError(400, "User is null");
-                
+
                 return response;
             }
 

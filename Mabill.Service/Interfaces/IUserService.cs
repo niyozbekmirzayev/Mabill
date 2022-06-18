@@ -3,9 +3,7 @@ using Mabill.Domain.Entities.Users;
 using Mabill.Service.Dtos.Users;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mabill.Service.Interfaces

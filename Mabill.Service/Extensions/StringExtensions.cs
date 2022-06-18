@@ -16,7 +16,7 @@ namespace Mabill.Service.Extensions
                 {
                     sOutput.Append(bytes[i].ToString("X2"));
                 }
-                
+
                 return sOutput.ToString();
             }
         }
