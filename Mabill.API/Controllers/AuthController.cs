@@ -5,6 +5,7 @@ using Mabill.Service.Extensions;
 using Mabill.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Mabill.API.Controllers
@@ -33,6 +34,7 @@ namespace Mabill.API.Controllers
 
             string token = authService.GenerateToken(user);
 
+            Console.WriteLine($"{token} givent to user with the id of {user.Id}");
             return Ok(token);
         }
     }

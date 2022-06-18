@@ -4,6 +4,7 @@ using Mabill.Service.Dtos.Users;
 using Mabill.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Mabill.API.Controllers
@@ -33,6 +34,7 @@ namespace Mabill.API.Controllers
                 else if (result.Error.Code == 409) return Conflict(result);
             }
 
+            Console.WriteLine("User created with the Id of " + result.Data.Id);
             return Ok(result);
         }
 

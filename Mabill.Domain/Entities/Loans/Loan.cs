@@ -50,6 +50,5 @@ namespace Mabill.Domain.Entities.Loans
         public Guid JournalId { get; set; }
         [NotMapped]
         public virtual Journal Journal { get; set; }
-
     }
 }
