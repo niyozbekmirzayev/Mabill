@@ -16,7 +16,6 @@ namespace Mabill.Domain.Entities.Organizations
 
         [Required]
         public string Name { get; set; }
-
         public string Description { get; set; }
         public decimal SumOfGivenLoans { get; set; }
 

@@ -30,7 +30,7 @@ namespace Mabill.Domain.Entities.Users
         public decimal? SumOfGivenLoans { get; set; }
 
         [ForeignKey(nameof(Organization))]
-        public Guid OrganizationId { get; set; }
+        public Guid? OrganizationId { get; set; }
         [NotMapped]
         public virtual Organization Organization { get; set; }
         #endregion

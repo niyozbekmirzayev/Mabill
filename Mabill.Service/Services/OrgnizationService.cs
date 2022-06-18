@@ -14,15 +14,13 @@ namespace Mabill.Service.Services
     public class OrgnizationService : IOrganizationService
     {
         private readonly IOrganizationRepository organizationRepository;
-        private readonly IHttpContextAccessor httpContext;
 
-        public OrgnizationService(IOrganizationRepository organizationRepository, IHttpContextAccessor httpContext)
+        public OrgnizationService(IOrganizationRepository organizationRepository)
         {
             this.organizationRepository = organizationRepository;
-            this.httpContext = httpContext;
         }
 
-        public Task<BaseResponse<Organization>> AddAsync(Organization organization)
+        public Task<BaseResponse<Organization>> CreateAsync(Organization organization)
         {
             var response = new BaseResponse<Organization>();
 
@@ -53,7 +51,7 @@ namespace Mabill.Service.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<BaseResponse<Organization>> GetAll(Expression<Func<bool, Organization>> expression = null)
+        public BaseResponse<IEnumerable<Organization>> GetAll(Expression<Func<bool, Organization>> expression = null)
         {
             throw new NotImplementedException();
         }

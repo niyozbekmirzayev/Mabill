@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Mabill.Domain.Entities.Organizations;
+using Mabill.Domain.Entities.Users;
 using Mabill.Service.Dtos.Organizations;
+using Mabill.Service.Dtos.Users;
 
 namespace Mabill.Service.Mapping
 {
@@ -9,6 +11,7 @@ namespace Mabill.Service.Mapping
         public MappingConfigure()
         {
             CreateMap<Organization, GetOrganizationDto>().ReverseMap();
+            CreateMap<User, CreateUserDto>().ReverseMap();
         }
     }
 }

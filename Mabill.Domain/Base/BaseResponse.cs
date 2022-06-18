@@ -2,7 +2,7 @@
 {
     public class BaseResponse<T>
     {
-        public T Date { get; set; }
+        public T Data { get; set; }
         public BaseError Error { get; set; }
     }
 }

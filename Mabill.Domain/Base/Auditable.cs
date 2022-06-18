@@ -23,7 +23,6 @@ namespace Mabill.Domain.Base
             Status = ObjectStatus.Created;
             CreatedDate = DateTime.Now;
             CreatedBy = creatorId;
-
         }
 
         public void Delete(Guid? deletorId = null)
