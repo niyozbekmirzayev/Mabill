@@ -5,9 +5,12 @@ using Mabill.Domain.Entities.Users;
 using Mabill.Domain.Enums;
 using Mabill.Service.Dtos.Users;
 using Mabill.Service.Extensions;
+using Mabill.Service.Helpers;
 using Mabill.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -17,9 +20,11 @@ namespace Mabill.Service.Services
     {
         private readonly IMapper mapper;
         private IUserRepository userRepository;
+        private HttpContextHelper httpContextHelper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
+            this.httpContextHelper = new HttpContextHelper(httpContextAccessor);
             this.userRepository = userRepository;
             this.mapper = mapper;
         }
@@ -75,24 +80,102 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public async Task<BaseResponse<bool>> DeleteAsync(Expression<Func<User, bool>> expression)
         {
+            var response = new BaseResponse<bool>();
+            var exsistUser = await userRepository.GetAsync(expression);
+
+            if (exsistUser == null)
+            {
+                response.Error = new BaseError(404, "User not found");
+
+                return response;
+            }
+
+            exsistUser.Delete();
+            await userRepository.UpdateAsync(exsistUser);
+
+            response.Data = true;
+
+            return response;
+        }
+        
+        public BaseResponse<IEnumerable<User>> GetAll(Expression<Func<User, bool>> expression)
+        {
+            var response = new BaseResponse<IEnumerable<User>>();
+
+            var users = userRepository.GetAll(expression).AsEnumerable();
+
+            response.Data = users;
+
+            return response;
+        }
+
+        public async Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression)
+        {
+            var response = new BaseResponse<User>();
+
+            var user = await userRepository.GetAsync(expression);
+
+            if (user == null)
+            {
+                response.Error = new BaseError(404, "User not found");
+
+                return response;
+            }
+
+            return response;
+        }
+
+        public async Task<BaseResponse<User>> UpdateProfileAsync(UpdateUserProfileDto user)
+        {
+            var response = new BaseResponse<User>();
+
+            if (user == null)
+            {
+                response.Error = new BaseError(400, "User is null");
+
+                return response;
+            }
+
+            var currentUser = httpContextHelper.GetCurrentUser();
+
+            var exsistUser = await userRepository.GetAsync(x => x.Id == currentUser.Id && x.Status != ObjectStatus.Deleted);
+
             throw new NotImplementedException();
         }
 
-        public BaseResponse<IEnumerable<User>> GetAll(Expression<Func<bool, User>> expression = null)
+        public async Task<BaseResponse<bool>> UpdatePasswordAsync(UpdateUserPasswordDto user)
         {
-            throw new NotImplementedException();
-        }
+            var response = new BaseResponse<bool>();
 
-        public Task<BaseResponse<User>> GetAsync(Expression<Func<bool, User>> expression)
-        {
-            throw new NotImplementedException();
-        }
+            #region Data validation
+            if (user == null)
+            {
+                response.Error = new BaseError(400, "User is null");
 
-        public Task<BaseResponse<User>> UpdateAysnc(User user)
-        {
-            throw new NotImplementedException();
+                return response;
+            }
+
+            var currentUser = httpContextHelper.GetCurrentUser();
+
+            var exsistUser = await userRepository.GetAsync(x => x.Id == currentUser.Id && x.Password == user.Password.EncodeInSha256() &&
+                                                           x.Status != ObjectStatus.Deleted);
+
+            if (exsistUser == null)
+            {
+                response.Error = new BaseError(400, "Password did not match");
+
+                return response;
+            }
+            #endregion
+
+            exsistUser.Password = user.NewPassword.EncodeInSha256();
+            exsistUser.Modify();
+            await userRepository.UpdateAsync(exsistUser);
+            response.Data = true;
+
+            return response;
         }
-    }
+    }        
 }

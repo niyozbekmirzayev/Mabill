@@ -6,11 +6,11 @@ using System.Security.Claims;
 
 namespace Mabill.Service.Helpers
 {
-    public class HttpContextHelpers
+    public class HttpContextHelper
     {
         private readonly IHttpContextAccessor contextAccessor;
 
-        public HttpContextHelpers(IHttpContextAccessor contextAccessor)
+        public HttpContextHelper(IHttpContextAccessor contextAccessor)
         {
             this.contextAccessor = contextAccessor;
         }
