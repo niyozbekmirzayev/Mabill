@@ -12,6 +12,8 @@ namespace Mabill.Service.Mapping
         {
             CreateMap<Organization, GetOrganizationDto>().ReverseMap();
             CreateMap<User, CreateUserDto>().ReverseMap();
+            CreateMap<User, UpdateUserPasswordDto>().ReverseMap();
+            CreateMap<User, UpdateUserProfileDto>().ReverseMap();
         }
     }
 }
