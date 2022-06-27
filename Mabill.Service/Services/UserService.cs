@@ -80,7 +80,7 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public async Task<BaseResponse<bool>> DeleteProfileAsync(DeleteUserProfileDto user)
+        public async Task<BaseResponse<bool>> DeleteAsync(DeleteUserProfileDto user)
         {
             var response = new BaseResponse<bool>();
 

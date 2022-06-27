@@ -71,7 +71,7 @@ namespace Mabill.API.Controllers
         public async Task<ActionResult<BaseResponse<bool>>> DeleteProfile(DeleteUserProfileDto user)
         {
             Console.WriteLine("---> Deleteing user....");
-            var result = await userService.DeleteProfileAsync(user);
+            var result = await userService.DeleteAsync(user);
 
             // Identification of error 
             if (result.Error is not null)

@@ -15,6 +15,6 @@ namespace Mabill.Service.Interfaces
         Task<BaseResponse<User>> CreateAsync(CreateUserDto user);
         Task<BaseResponse<User>> UpdateProfileAsync(UpdateUserProfileDto user);
         Task<BaseResponse<bool>> UpdatePasswordAsync(UpdateUserPasswordDto user);
-        Task<BaseResponse<bool>> DeleteProfileAsync(DeleteUserProfileDto user);
+        Task<BaseResponse<bool>> DeleteAsync(DeleteUserProfileDto user);
     }
 }
