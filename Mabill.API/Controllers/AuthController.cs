@@ -5,6 +5,7 @@ using Mabill.Service.Extensions;
 using Mabill.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -16,17 +17,20 @@ namespace Mabill.API.Controllers
     {
         private readonly IAuthService authService;
         private readonly IUserRepository userRepository;
-        public AuthController(IAuthService authService, IUserRepository userRepository)
+        private IConfiguration config;
+
+        public AuthController(IAuthService authService, IUserRepository userRepository, IConfiguration config)
         {
             this.authService = authService;
             this.userRepository = userRepository;
+            this.config = config;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> CreateToken([FromBody] LoginDto loginParams)
         {
-            var user = await userRepository.GetAsync(user => user.Username == loginParams.Username &&
+            var user = await userRepository.GetAsync(user => user.Username == loginParams.Username.ToLower() &&
                                                        user.Password == loginParams.Password.EncodeInSha256() &&
                                                        user.Status != ObjectStatus.Deleted);
 
@@ -34,8 +38,14 @@ namespace Mabill.API.Controllers
 
             string token = authService.GenerateToken(user);
 
+            var tokenInofo = new TokenInfoDto
+            {
+                Token = token,
+                Expires = DateTime.Now.AddMinutes(double.Parse(config.GetSection("JWT:Expire").Value))
+            };
+
             Console.WriteLine($"{token} givent to user with the id of {user.Id}");
-            return Ok(token);
+            return Ok(tokenInofo);
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Mabill.Service.Services
                 }
             }
 
-            var exsitUsername = await userRepository.GetAsync(x => x.Username == user.Username && x.Status != ObjectStatus.Deleted);
+            var exsitUsername = await userRepository.GetAsync(x => x.Username == user.Username.ToLower() && x.Status != ObjectStatus.Deleted);
             if (exsitUsername != null)
             {
                 response.Error = new BaseError(409, "User with same username already exists");
@@ -70,6 +70,7 @@ namespace Mabill.Service.Services
             }
             #endregion
 
+            user.Username = user.Username.ToLower();
             var newUser = mapper.Map<User>(user);
             newUser.Create();
             newUser.Password = newUser.Password.EncodeInSha256();
@@ -176,7 +177,7 @@ namespace Mabill.Service.Services
 
             if (!String.IsNullOrEmpty(user.Username))
             {
-                var exsitUsername = await userRepository.GetAsync(x => x.Username == user.Username && x.Status != ObjectStatus.Deleted);
+                var exsitUsername = await userRepository.GetAsync(x => x.Username == user.Username.ToLower() && x.Status != ObjectStatus.Deleted);
 
                 if (exsitUsername != null && exsitUsername.Id != currentUser.Id)
                 {

@@ -24,7 +24,7 @@ namespace Mabill.API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<BaseResponse<User>>> Create([FromForm] CreateUserDto user)
+        public async Task<ActionResult<BaseResponse<User>>> Create([FromBody] CreateUserDto user)
         {
             Console.WriteLine("---> Creating user....");
             var result = await userService.CreateAsync(user);

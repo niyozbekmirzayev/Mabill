@@ -11,7 +11,9 @@ namespace Mabill.Service.Mapping
         public MappingConfigure()
         {
             CreateMap<Organization, GetOrganizationDto>().ReverseMap();
-            CreateMap<User, CreateUserDto>().ReverseMap();
+            CreateMap<CreateOrganizationDto, Organization>().ReverseMap();
+
+            CreateMap<CreateUserDto, User>().ReverseMap();
             CreateMap<User, UpdateUserPasswordDto>();
             CreateMap<UpdateUserProfileDto, User>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
