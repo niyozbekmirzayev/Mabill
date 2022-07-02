@@ -3,6 +3,7 @@ using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.Loanees;
 using Mabill.Domain.Entities.Users;
 using Mabill.Domain.Enums;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,7 +19,7 @@ namespace Mabill.Domain.Entities.Loans
 
         public Currency? CurrencyType { get; set; }
 
-        public string CustomCurrencyType { get; set; }
+        public string CustomCurrencyType { get; set; } = null;
 
         [Required]
         public bool IsPaid { get; set; } = false;
@@ -26,29 +27,34 @@ namespace Mabill.Domain.Entities.Loans
         [Required]
         public DateTime Deadline { get; set; }
 
-        [ForeignKey(nameof(Loanee))]
+        [JsonIgnore]
         public Guid? LoaneeId { get; set; }
         [NotMapped]
+        [ForeignKey(nameof(LoaneeId))]
         public virtual Loanee Loanee { get; set; }
 
-        [ForeignKey(nameof(User))]
+        [JsonIgnore]
         public Guid? UserId { get; set; }
         [NotMapped]
+        [ForeignKey(nameof(UserId))]
         public virtual User User { get; set; }
 
-        [ForeignKey(nameof(GivenBy))]
+        [JsonIgnore]
         public Guid GivenById { get; set; }
         [NotMapped]
+        [ForeignKey(nameof(GivenById))]
         public virtual User GivenBy { get; set; }
 
-        [ForeignKey(nameof(TakeBy))]
+        [JsonIgnore]
         public Guid? TakenById { get; set; }
         [NotMapped]
+        [ForeignKey(nameof(TakenById))]
         public virtual User TakeBy { get; set; }
 
-        [ForeignKey(nameof(Journal))]
+        [JsonIgnore]
         public Guid JournalId { get; set; }
         [NotMapped]
+        [ForeignKey(nameof(JournalId))]
         public virtual Journal Journal { get; set; }
     }
 }

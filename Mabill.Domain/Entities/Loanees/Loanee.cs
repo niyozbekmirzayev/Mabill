@@ -2,6 +2,7 @@
 using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.Loans;
 using Mabill.Domain.Entities.Users;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,18 +19,22 @@ namespace Mabill.Domain.Entities.Loanees
         public virtual ICollection<Loan> Loans { get; set; }
 
         public string Description { get; set; }
-        public decimal? SumOfLoans { get; set; }
-        public decimal? SumOfRepaidLoans { get; set; }
+        [NotMapped]
+        public decimal SumOfLoans { get; set; }
+        [NotMapped]
+        public decimal SumOfRepaidLoans { get; set; }
 
-        [ForeignKey(nameof(AddedBy))]
+        [JsonIgnore]
         public Guid AddedById { get; set; }
         [NotMapped]
+        [ForeignKey(nameof(AddedById))]
         public virtual User AddedBy { get; set; }
 
-        [ForeignKey(nameof(Journal))]
-        public virtual Guid JournalId { get; set; }
+        [JsonIgnore]
+        public Guid JournalId { get; set; }
 
         [NotMapped]
+        [ForeignKey(nameof(JournalId))]
         public virtual Journal Journal { get; set; }
     }
 }

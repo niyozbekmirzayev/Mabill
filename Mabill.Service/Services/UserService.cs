@@ -8,6 +8,7 @@ using Mabill.Service.Extensions;
 using Mabill.Service.Helpers;
 using Mabill.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,7 +117,7 @@ namespace Mabill.Service.Services
         {
             var response = new BaseResponse<IEnumerable<User>>();
 
-            var users = userRepository.GetAll(expression).AsEnumerable();
+            var users = userRepository.GetAll(expression).Include(user => user.Organization).AsEnumerable();
 
             response.Data = users;
 

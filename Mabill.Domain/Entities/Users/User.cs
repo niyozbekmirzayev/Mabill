@@ -2,6 +2,7 @@
 using Mabill.Domain.Entities.Loans;
 using Mabill.Domain.Entities.Organizations;
 using Mabill.Domain.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,19 +26,22 @@ namespace Mabill.Domain.Entities.Users
         #endregion
 
         #region Staff
+        [NotMapped]
+        public decimal SumOfGivenLoans { get; set; }
         public StaffRole? Role { get; set; } = null;
 
-        public decimal? SumOfGivenLoans { get; set; }
-
-        [ForeignKey(nameof(Organization))]
+        [JsonIgnore]
         public Guid? OrganizationId { get; set; }
         [NotMapped]
+        [ForeignKey(nameof(OrganizationId))]
         public virtual Organization Organization { get; set; }
         #endregion
 
         #region Loanee
-        public decimal? SumOfLoans { get; set; } = null;
-        public decimal? SumOfRepaidLoans { get; set; } = null;
+        [NotMapped]
+        public decimal SumOfLoans { get; set; }
+        [NotMapped]
+        public decimal SumOfRepaidLoans { get; set; }
 
         public virtual ICollection<Loan> Loans { get; set; }
         #endregion

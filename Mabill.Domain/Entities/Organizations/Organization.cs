@@ -23,12 +23,5 @@ namespace Mabill.Domain.Entities.Organizations
 
         public virtual ICollection<User> Staffs { get; set; }
         public virtual ICollection<Journal> Journals { get; set; }
-
-
-        [ForeignKey(nameof(Owner))]
-        public Guid OwnerId { get; set; }
-
-        [NotMapped]
-        public virtual User Owner { get; set; }
     }
 }

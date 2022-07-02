@@ -3,15 +3,17 @@ using System;
 using Mabill.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Mabill.Data.Migrations
 {
     [DbContext(typeof(MabillDbContext))]
-    partial class MabillDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220702112739_ForeignKeyForUserAndOrganizationUpdated")]
+    partial class ForeignKeyForUserAndOrganizationUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,6 +53,9 @@ namespace Mabill.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<decimal>("SumOfGivenLoans")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -119,6 +124,12 @@ namespace Mabill.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<decimal?>("SumOfLoans")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("SumOfRepaidLoans")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -297,6 +308,15 @@ namespace Mabill.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<decimal?>("SumOfGivenLoans")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("SumOfLoans")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("SumOfRepaidLoans")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Username")
                         .IsRequired()

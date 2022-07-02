@@ -88,7 +88,7 @@ namespace Mabill.Service.Services
                 .Include(k => k.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loanees).Where(p => p.Status != ObjectStatus.Deleted)
                 .FirstOrDefault();*/
 
-            var owner = userRepository.GetAll().Include(user => user.Organization).FirstOrDefault();
+            var owner = userRepository.GetAll().Include(p => p.Organization).First();
             
             if(owner == null) 
             {
