@@ -36,5 +36,41 @@ namespace Mabill.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<BaseResponse<Organization>>> Get(Guid id) 
+        {
+            Console.WriteLine("---> Getting organization....");
+            var result = await organizationService.GetAsync(o => o.Id == id);
+
+            // Identification of error 
+            if (result.Error is not null)
+            {
+                if (result.Error.Code == 404) return NotFound(result);
+                else if (result.Error.Code == 400) return BadRequest(result);
+                else if (result.Error.Code == 409) return Conflict(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<ActionResult<BaseResponse<Organization>>> Delete(DeleteOrganizationDto deleteOrganizationDto)
+        {
+            Console.WriteLine("---> Deleting organization....");
+            var result = await organizationService.DeleteAsync(deleteOrganizationDto);
+
+            // Identification of error 
+            if (result.Error is not null)
+            {
+                if (result.Error.Code == 404) return NotFound(result);
+                else if (result.Error.Code == 400) return BadRequest(result);
+                else if (result.Error.Code == 409) return Conflict(result);
+            }
+
+            return Ok(result);
+        }
     }
 }
+

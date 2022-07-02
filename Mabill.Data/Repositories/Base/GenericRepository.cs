@@ -17,8 +17,8 @@ namespace Mabill.Data.Repositories.Base
         public GenericRepository(MabillDbContext context)
         {
             this.context = context;
-            this.dbSet = context.Set<T>();
-            this.query = dbSet;
+            dbSet = context.Set<T>();
+            query = dbSet;
         }
 
         public async Task SaveChangesAsync() => await context.SaveChangesAsync();
@@ -35,30 +35,18 @@ namespace Mabill.Data.Repositories.Base
             return true;
         }
 
-        public IQueryable<T> GetAll(Expression<Func<T, bool>> expression = null,
-                                    Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                    string includeString = null, bool disableTracking = true)
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> expression = null, bool disableTracking = true)
         {
             if (disableTracking)
                 query = query.AsNoTracking();
-
-            if (!string.IsNullOrWhiteSpace(includeString))
-                query = query.Include(includeString);
-
-            if (orderBy != null)
-                query = orderBy(query);
 
             return expression == null ? query : query.Where(expression);
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> expression, string includeString = null,
-                                      bool disableTracking = true)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> expression, bool disableTracking = true)
         {
             if (disableTracking)
                 query = query.AsNoTracking();
-
-            if (!string.IsNullOrWhiteSpace(includeString))
-                query = query.Include(includeString);
 
             return await query.FirstOrDefaultAsync(expression);
         }

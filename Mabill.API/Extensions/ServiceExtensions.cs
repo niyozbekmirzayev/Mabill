@@ -17,6 +17,12 @@ namespace Mabill.API.Extensions
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IJournalRepository, JournalRepository>();
+
+            services.AddScoped<ILoanRepository, LoanRepository>();
+
+            services.AddScoped<ILoaneeRepository, LoaneeRepository>();
         }
     }
 }

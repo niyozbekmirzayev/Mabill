@@ -19,8 +19,8 @@ namespace Mabill.Service.Services
     public class UserService : IUserService
     {
         private readonly IMapper mapper;
-        private IUserRepository userRepository;
-        private HttpContextHelper httpContextHelper;
+        private readonly IUserRepository userRepository;
+        private readonly HttpContextHelper httpContextHelper;
 
         public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {

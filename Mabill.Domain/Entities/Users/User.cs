@@ -13,7 +13,7 @@ namespace Mabill.Domain.Entities.Users
     {
         public User()
         {
-            this.Loans = new List<Loan>();
+            Loans = new List<Loan>();
         }
 
         #region Common
@@ -25,7 +25,7 @@ namespace Mabill.Domain.Entities.Users
         #endregion
 
         #region Staff
-        public StaffRole? Role { get; set; }
+        public StaffRole? Role { get; set; } = null;
 
         public decimal? SumOfGivenLoans { get; set; }
 
@@ -36,8 +36,8 @@ namespace Mabill.Domain.Entities.Users
         #endregion
 
         #region Loanee
-        public decimal? SumOfLoans { get; set; }
-        public decimal? SumOfRepaidLoans { get; set; }
+        public decimal? SumOfLoans { get; set; } = null;
+        public decimal? SumOfRepaidLoans { get; set; } = null;
 
         public virtual ICollection<Loan> Loans { get; set; }
         #endregion

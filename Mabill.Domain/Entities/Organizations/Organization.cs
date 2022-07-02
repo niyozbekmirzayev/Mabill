@@ -1,8 +1,10 @@
 ﻿using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.Users;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mabill.Domain.Entities.Organizations
 {
@@ -21,5 +23,12 @@ namespace Mabill.Domain.Entities.Organizations
 
         public virtual ICollection<User> Staffs { get; set; }
         public virtual ICollection<Journal> Journals { get; set; }
+
+
+        [ForeignKey(nameof(Owner))]
+        public Guid OwnerId { get; set; }
+
+        [NotMapped]
+        public virtual User Owner { get; set; }
     }
 }

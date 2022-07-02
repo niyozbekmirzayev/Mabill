@@ -1,4 +1,5 @@
 ﻿using Mabill.Domain.Base;
+using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.Loans;
 using Mabill.Domain.Entities.Users;
 using System;
@@ -24,5 +25,11 @@ namespace Mabill.Domain.Entities.Loanees
         public Guid AddedById { get; set; }
         [NotMapped]
         public virtual User AddedBy { get; set; }
+
+        [ForeignKey(nameof(Journal))]
+        public virtual Guid JournalId { get; set; }
+
+        [NotMapped]
+        public virtual Journal Journal { get; set; }
     }
 }
