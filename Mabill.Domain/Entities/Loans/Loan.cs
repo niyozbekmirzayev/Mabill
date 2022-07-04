@@ -29,31 +29,27 @@ namespace Mabill.Domain.Entities.Loans
 
         [JsonIgnore]
         public Guid? LoaneeId { get; set; }
-        [NotMapped]
         [ForeignKey(nameof(LoaneeId))]
         public virtual Loanee Loanee { get; set; }
 
         [JsonIgnore]
         public Guid? UserId { get; set; }
-        [NotMapped]
         [ForeignKey(nameof(UserId))]
+        [InverseProperty("Loans")]
         public virtual User User { get; set; }
 
         [JsonIgnore]
         public Guid GivenById { get; set; }
-        [NotMapped]
         [ForeignKey(nameof(GivenById))]
         public virtual User GivenBy { get; set; }
 
         [JsonIgnore]
         public Guid? TakenById { get; set; }
-        [NotMapped]
         [ForeignKey(nameof(TakenById))]
         public virtual User TakeBy { get; set; }
 
         [JsonIgnore]
         public Guid JournalId { get; set; }
-        [NotMapped]
         [ForeignKey(nameof(JournalId))]
         public virtual Journal Journal { get; set; }
     }

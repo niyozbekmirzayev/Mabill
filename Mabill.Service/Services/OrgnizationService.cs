@@ -71,37 +71,35 @@ namespace Mabill.Service.Services
             mappedOrganization.Create(currentUser.Id);
             var createdOrganization = await organizationRepository.CreateAsync(mappedOrganization);
             createdOrganization.Staffs.Add(owner);
-            
+
             await organizationRepository.SaveChangesAsync();
             response.Data = createdOrganization;
 
             return response;
         }
-        
+
         public async Task<BaseResponse<bool>> DeleteAsync(DeleteOrganizationDto organization)
         {
             var response = new BaseResponse<bool>();
             var currentUser = httpContextHelper.GetCurrentUser();
 
-            /*var owner = userRepository.GetAll(p => p.Id == currentUser.Id && organization.Password.EncodeInSha256() == p.Password)
+            var owner = userRepository.GetAll(p => p.Id == currentUser.Id && organization.Password.EncodeInSha256() == p.Password)
                 .Include(user => user.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loans).Where(p => p.Status != ObjectStatus.Deleted)
                 .Include(k => k.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loanees).Where(p => p.Status != ObjectStatus.Deleted)
-                .FirstOrDefault();*/
+                .FirstOrDefault();
 
-            var owner = userRepository.GetAll().Include(p => p.Organization).First();
-            
-            if(owner == null) 
+            if (owner == null)
             {
                 response.Error = new BaseError(401, "Invalid password");
 
                 return response;
             }
-            
-            
+
+
             if (owner.Organization == null || owner.Role == null || owner.Role != StaffRole.Owner)
             {
                 response.Error = new BaseError(401, "User has no organization");
-                
+
                 return response;
             }
 
@@ -112,6 +110,7 @@ namespace Mabill.Service.Services
 
             await organizationRepository.SaveChangesAsync();
 
+
             response.Data = true;
 
             return response;
@@ -121,7 +120,7 @@ namespace Mabill.Service.Services
         {
             throw new NotImplementedException();
         }
-       
+
         public async Task<BaseResponse<Organization>> GetAsync(Expression<Func<Organization, bool>> expression)
         {
             var response = new BaseResponse<Organization>();

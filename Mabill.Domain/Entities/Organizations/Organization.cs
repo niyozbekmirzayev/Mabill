@@ -1,10 +1,8 @@
 ﻿using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.Users;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mabill.Domain.Entities.Organizations
 {

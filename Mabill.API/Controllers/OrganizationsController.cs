@@ -38,7 +38,7 @@ namespace Mabill.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<BaseResponse<Organization>>> Get(Guid id) 
+        public async Task<ActionResult<BaseResponse<Organization>>> Get(Guid id)
         {
             Console.WriteLine("---> Getting organization....");
             var result = await organizationService.GetAsync(o => o.Id == id);

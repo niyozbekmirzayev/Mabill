@@ -32,7 +32,7 @@ namespace Mabill.Domain.Entities.Users
 
         [JsonIgnore]
         public Guid? OrganizationId { get; set; }
-        [NotMapped]
+
         [ForeignKey(nameof(OrganizationId))]
         public virtual Organization Organization { get; set; }
         #endregion
@@ -43,6 +43,7 @@ namespace Mabill.Domain.Entities.Users
         [NotMapped]
         public decimal SumOfRepaidLoans { get; set; }
 
+        [InverseProperty(nameof(Loan.User))]
         public virtual ICollection<Loan> Loans { get; set; }
         #endregion
     }

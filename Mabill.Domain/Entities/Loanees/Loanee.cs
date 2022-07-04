@@ -26,14 +26,13 @@ namespace Mabill.Domain.Entities.Loanees
 
         [JsonIgnore]
         public Guid AddedById { get; set; }
-        [NotMapped]
+
         [ForeignKey(nameof(AddedById))]
         public virtual User AddedBy { get; set; }
 
         [JsonIgnore]
         public Guid JournalId { get; set; }
 
-        [NotMapped]
         [ForeignKey(nameof(JournalId))]
         public virtual Journal Journal { get; set; }
     }

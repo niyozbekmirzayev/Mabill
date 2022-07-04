@@ -85,6 +85,11 @@ namespace Mabill.API
             });
             #endregion
 
+            services.AddControllers().AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+
             // Reginstring to use mapper
             services.AddAutoMapper(typeof(MappingConfigure));
 

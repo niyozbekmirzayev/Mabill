@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mabill.Data.Migrations
 {
     [DbContext(typeof(MabillDbContext))]
-    [Migration("20220617172927_AdminChangedToStaff")]
-    partial class AdminChangedToStaff
+    [Migration("20220704192541_ErrorFixedInLoans")]
+    partial class ErrorFixedInLoans
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,9 +54,6 @@ namespace Mabill.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("SumOfGivenLoans")
-                        .HasColumnType("numeric");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -80,11 +77,8 @@ namespace Mabill.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<decimal>("AmountOfPaymet")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("numeric");
+                    b.Property<DateTime?>("BrithDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
@@ -128,10 +122,11 @@ namespace Mabill.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("SumOfLoans")
-                        .HasColumnType("numeric");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AddedById");
+
+                    b.HasIndex("JournalId");
 
                     b.ToTable("Loanees");
                 });
@@ -151,6 +146,12 @@ namespace Mabill.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int?>("CurrencyType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CustomCurrencyType")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("timestamp without time zone");
 
@@ -169,10 +170,13 @@ namespace Mabill.Data.Migrations
                     b.Property<bool>("IsPaid")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid>("JournalId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("LastModificatedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("LoaneeId")
+                    b.Property<Guid?>("LoaneeId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ModifiedBy")
@@ -184,9 +188,20 @@ namespace Mabill.Data.Migrations
                     b.Property<Guid?>("TakenById")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("GivenById");
+
+                    b.HasIndex("JournalId");
+
                     b.HasIndex("LoaneeId");
+
+                    b.HasIndex("TakenById");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Loans");
                 });
@@ -233,7 +248,7 @@ namespace Mabill.Data.Migrations
                     b.ToTable("Organizations");
                 });
 
-            modelBuilder.Entity("Mabill.Domain.Entities.Staffs.Staff", b =>
+            modelBuilder.Entity("Mabill.Domain.Entities.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -241,6 +256,9 @@ namespace Mabill.Data.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("BrithDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
@@ -271,7 +289,7 @@ namespace Mabill.Data.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("OrganizationId")
+                    b.Property<Guid?>("OrganizationId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Password")
@@ -282,14 +300,11 @@ namespace Mabill.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Role")
+                    b.Property<int?>("Role")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
-
-                    b.Property<decimal>("SumOfGivenLoans")
-                        .HasColumnType("numeric");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -299,34 +314,90 @@ namespace Mabill.Data.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Staffs");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Mabill.Domain.Entities.Journals.Journal", b =>
                 {
-                    b.HasOne("Mabill.Domain.Entities.Organizations.Organization", null)
+                    b.HasOne("Mabill.Domain.Entities.Organizations.Organization", "Organization")
                         .WithMany("Journals")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Mabill.Domain.Entities.Loanees.Loanee", b =>
+                {
+                    b.HasOne("Mabill.Domain.Entities.Users.User", "AddedBy")
+                        .WithMany()
+                        .HasForeignKey("AddedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mabill.Domain.Entities.Journals.Journal", "Journal")
+                        .WithMany("Loanees")
+                        .HasForeignKey("JournalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddedBy");
+
+                    b.Navigation("Journal");
                 });
 
             modelBuilder.Entity("Mabill.Domain.Entities.Loans.Loan", b =>
                 {
-                    b.HasOne("Mabill.Domain.Entities.Loanees.Loanee", null)
-                        .WithMany("Loans")
-                        .HasForeignKey("LoaneeId")
+                    b.HasOne("Mabill.Domain.Entities.Users.User", "GivenBy")
+                        .WithMany()
+                        .HasForeignKey("GivenById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Mabill.Domain.Entities.Journals.Journal", "Journal")
+                        .WithMany("Loans")
+                        .HasForeignKey("JournalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mabill.Domain.Entities.Loanees.Loanee", "Loanee")
+                        .WithMany("Loans")
+                        .HasForeignKey("LoaneeId");
+
+                    b.HasOne("Mabill.Domain.Entities.Users.User", "TakeBy")
+                        .WithMany()
+                        .HasForeignKey("TakenById");
+
+                    b.HasOne("Mabill.Domain.Entities.Users.User", "User")
+                        .WithMany("Loans")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("GivenBy");
+
+                    b.Navigation("Journal");
+
+                    b.Navigation("Loanee");
+
+                    b.Navigation("TakeBy");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Mabill.Domain.Entities.Staffs.Staff", b =>
+            modelBuilder.Entity("Mabill.Domain.Entities.Users.User", b =>
                 {
-                    b.HasOne("Mabill.Domain.Entities.Organizations.Organization", null)
+                    b.HasOne("Mabill.Domain.Entities.Organizations.Organization", "Organization")
                         .WithMany("Staffs")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrganizationId");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Mabill.Domain.Entities.Journals.Journal", b =>
+                {
+                    b.Navigation("Loanees");
+
+                    b.Navigation("Loans");
                 });
 
             modelBuilder.Entity("Mabill.Domain.Entities.Loanees.Loanee", b =>
@@ -339,6 +410,11 @@ namespace Mabill.Data.Migrations
                     b.Navigation("Journals");
 
                     b.Navigation("Staffs");
+                });
+
+            modelBuilder.Entity("Mabill.Domain.Entities.Users.User", b =>
+                {
+                    b.Navigation("Loans");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,70 +3,10 @@ using System;
 
 namespace Mabill.Data.Migrations
 {
-    public partial class EntitiesMigrated : Migration
+    public partial class EntitesAddedToTheDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Loanees",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    SumOfLoans = table.Column<decimal>(type: "numeric", nullable: false),
-                    AmountOfPaymet = table.Column<decimal>(type: "numeric", nullable: false),
-                    Balance = table.Column<decimal>(type: "numeric", nullable: false),
-                    AddedById = table.Column<Guid>(type: "uuid", nullable: false),
-                    JournalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    DeletedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModificatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Loanees", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Loans",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    IsPaid = table.Column<bool>(type: "boolean", nullable: false),
-                    Deadline = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LoaneeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    GivenById = table.Column<Guid>(type: "uuid", nullable: false),
-                    TakenById = table.Column<Guid>(type: "uuid", nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    DeletedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModificatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Loans", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Loans_Loanees_LoaneeId",
-                        column: x => x.LoaneeId,
-                        principalTable: "Loanees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Organizations",
                 columns: table => new
@@ -75,7 +15,6 @@ namespace Mabill.Data.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     SumOfGivenLoans = table.Column<decimal>(type: "numeric", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
@@ -90,47 +29,12 @@ namespace Mabill.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Admins",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    Role = table.Column<int>(type: "integer", nullable: false),
-                    SumOfGivenLoans = table.Column<decimal>(type: "numeric", nullable: false),
-                    OrganizationId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    DeletedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModificatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Admins", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Admins_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Journals",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    SumOfGivenLoans = table.Column<decimal>(type: "numeric", nullable: false),
                     OrganizationId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -151,10 +55,119 @@ namespace Mabill.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Admins_OrganizationId",
-                table: "Admins",
-                column: "OrganizationId");
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: true),
+                    OrganizationId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    BrithDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Loanees",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    AddedById = table.Column<Guid>(type: "uuid", nullable: false),
+                    JournalId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    BrithDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Loanees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Loanees_Journals_JournalId",
+                        column: x => x.JournalId,
+                        principalTable: "Journals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Loans",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    CurrencyType = table.Column<int>(type: "integer", nullable: true),
+                    CustomCurrencyType = table.Column<string>(type: "text", nullable: true),
+                    IsPaid = table.Column<bool>(type: "boolean", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LoaneeId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    GivenById = table.Column<Guid>(type: "uuid", nullable: false),
+                    TakenById = table.Column<Guid>(type: "uuid", nullable: true),
+                    JournalId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Loans", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Loans_Journals_JournalId",
+                        column: x => x.JournalId,
+                        principalTable: "Journals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Loans_Loanees_LoaneeId",
+                        column: x => x.LoaneeId,
+                        principalTable: "Loanees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Loans_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Journals_OrganizationId",
@@ -162,33 +175,33 @@ namespace Mabill.Data.Migrations
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Loanees_JournalId",
+                table: "Loanees",
+                column: "JournalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Loans_JournalId",
+                table: "Loans",
+                column: "JournalId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Loans_LoaneeId",
                 table: "Loans",
                 column: "LoaneeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Organizations_OwnerId",
-                table: "Organizations",
-                column: "OwnerId");
+                name: "IX_Loans_UserId",
+                table: "Loans",
+                column: "UserId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Organizations_Admins_OwnerId",
-                table: "Organizations",
-                column: "OwnerId",
-                principalTable: "Admins",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_OrganizationId",
+                table: "Users",
+                column: "OrganizationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Admins_Organizations_OrganizationId",
-                table: "Admins");
-
-            migrationBuilder.DropTable(
-                name: "Journals");
-
             migrationBuilder.DropTable(
                 name: "Loans");
 
@@ -196,10 +209,13 @@ namespace Mabill.Data.Migrations
                 name: "Loanees");
 
             migrationBuilder.DropTable(
-                name: "Organizations");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Admins");
+                name: "Journals");
+
+            migrationBuilder.DropTable(
+                name: "Organizations");
         }
     }
 }

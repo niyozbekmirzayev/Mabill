@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mabill.Data.Migrations
 {
     [DbContext(typeof(MabillDbContext))]
-    [Migration("20220702112739_ForeignKeyForUserAndOrganizationUpdated")]
-    partial class ForeignKeyForUserAndOrganizationUpdated
+    [Migration("20220703142538_EntitesAddedToTheDatabase")]
+    partial class EntitesAddedToTheDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,9 +53,6 @@ namespace Mabill.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
-
-                    b.Property<decimal>("SumOfGivenLoans")
-                        .HasColumnType("numeric");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -124,12 +121,6 @@ namespace Mabill.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
-
-                    b.Property<decimal?>("SumOfLoans")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("SumOfRepaidLoans")
-                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -309,15 +300,6 @@ namespace Mabill.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("SumOfGivenLoans")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("SumOfLoans")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("SumOfRepaidLoans")
-                        .HasColumnType("numeric");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
@@ -366,9 +348,11 @@ namespace Mabill.Data.Migrations
 
             modelBuilder.Entity("Mabill.Domain.Entities.Users.User", b =>
                 {
-                    b.HasOne("Mabill.Domain.Entities.Organizations.Organization", null)
+                    b.HasOne("Mabill.Domain.Entities.Organizations.Organization", "Organization")
                         .WithMany("Staffs")
                         .HasForeignKey("OrganizationId");
+
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("Mabill.Domain.Entities.Journals.Journal", b =>

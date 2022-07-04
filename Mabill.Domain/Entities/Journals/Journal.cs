@@ -26,7 +26,7 @@ namespace Mabill.Domain.Entities.Journals
 
         [JsonIgnore]
         public Guid OrganizationId { get; set; }
-        [NotMapped]
+
         [ForeignKey(nameof(OrganizationId))]
         public virtual Organization Organization { get; set; }
 
