@@ -29,6 +29,7 @@ namespace Mabill.Domain.Entities.Users
         #region Staff
         [NotMapped]
         public decimal SumOfGivenLoans { get; set; }
+        [Column(TypeName = "varchar(24)")]
         [JsonConverter(typeof(StringEnumConverter))]
         public StaffRole? Role { get; set; } = null;
 

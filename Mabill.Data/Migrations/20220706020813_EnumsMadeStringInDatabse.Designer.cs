@@ -3,15 +3,17 @@ using System;
 using Mabill.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Mabill.Data.Migrations
 {
     [DbContext(typeof(MabillDbContext))]
-    partial class MabillDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220706020813_EnumsMadeStringInDatabse")]
+    partial class EnumsMadeStringInDatabse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

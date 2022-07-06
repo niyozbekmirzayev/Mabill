@@ -18,6 +18,7 @@ namespace Mabill.Domain.Entities.Loans
         [Required]
         public decimal Amount { get; set; }
 
+        [Column(TypeName = "varchar(24)")]
         [JsonConverter(typeof(StringEnumConverter))]
         public Currency? CurrencyType { get; set; }
 

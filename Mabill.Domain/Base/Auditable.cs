@@ -3,12 +3,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mabill.Domain.Base
 {
     public class Auditable : BaseEntity
     {
         [Required]
+        [Column(TypeName = "varchar(24)")]
         [JsonConverter(typeof(StringEnumConverter))]
         public ObjectStatus Status { get; set; }
         [Required]

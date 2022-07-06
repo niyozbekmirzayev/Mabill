@@ -63,6 +63,7 @@ namespace Mabill.Service.Services
             #endregion
 
             var currentUser = httpContextHelper.GetCurrentUser();
+            createOrganizationDto.Password = createOrganizationDto.Password.EncodeInSha256();
             var mappedOrganization = mapper.Map<Organization>(createOrganizationDto);
 
             var owner = await userRepository.GetAsync(p => p.Id == currentUser.Id);
@@ -83,12 +84,13 @@ namespace Mabill.Service.Services
             var response = new BaseResponse<bool>();
             var currentUser = httpContextHelper.GetCurrentUser();
 
-            var owner = userRepository.GetAll(p => p.Id == currentUser.Id && organization.Password.EncodeInSha256() == p.Password)
+            var owner = userRepository.GetAll(p => p.Id == currentUser.Id && p.Organization.Password == organization.OrganizationPassword.EncodeInSha256())
                 .Include(user => user.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loans).Where(p => p.Status != ObjectStatus.Deleted)
                 .Include(k => k.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loanees).Where(p => p.Status != ObjectStatus.Deleted)
                 .AsSplitQuery()
                 .FirstOrDefault();
 
+            #region Data validation
             if (owner == null)
             {
                 response.Error = new BaseError(401, "Invalid password");
@@ -96,21 +98,20 @@ namespace Mabill.Service.Services
                 return response;
             }
 
-
             if (owner.Organization == null || owner.Role == null || owner.Role != StaffRole.Owner)
             {
                 response.Error = new BaseError(401, "User has no organization");
 
                 return response;
             }
+            #endregion
 
-            owner.Organization.Journals.SelectMany(j => j.Loans).ToList().ForEach(l => l.Status = ObjectStatus.Deleted);
-            owner.Organization.Journals.SelectMany(j => j.Loanees).ToList().ForEach(l => l.Status = ObjectStatus.Deleted);
-            owner.Organization.Journals.ToList().ForEach(j => j.Status = ObjectStatus.Deleted);
-            owner.Organization.Status = ObjectStatus.Deleted;
+            owner.Organization.Journals.SelectMany(j => j.Loans).ToList().ForEach(l => l.Delete(owner.Id));
+            owner.Organization.Journals.SelectMany(j => j.Loanees).ToList().ForEach(l => l.Delete(owner.Id));
+            owner.Organization.Journals.ToList().ForEach(j => j.Delete(owner.Id));
+            owner.Organization.Delete(owner.Id);
 
             await organizationRepository.SaveChangesAsync();
-
 
             response.Data = true;
 

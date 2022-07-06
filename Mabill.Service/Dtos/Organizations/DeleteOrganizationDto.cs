@@ -5,6 +5,6 @@ namespace Mabill.Service.Dtos.Organizations
     public class DeleteOrganizationDto
     {
         [Required]
-        public string Password { get; set; }
+        public string OrganizationPassword { get; set; }
     }
 }
