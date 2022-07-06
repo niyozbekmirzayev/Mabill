@@ -86,6 +86,7 @@ namespace Mabill.Service.Services
             var owner = userRepository.GetAll(p => p.Id == currentUser.Id && organization.Password.EncodeInSha256() == p.Password)
                 .Include(user => user.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loans).Where(p => p.Status != ObjectStatus.Deleted)
                 .Include(k => k.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loanees).Where(p => p.Status != ObjectStatus.Deleted)
+                .AsSplitQuery()
                 .FirstOrDefault();
 
             if (owner == null)

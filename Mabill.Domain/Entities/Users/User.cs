@@ -3,6 +3,7 @@ using Mabill.Domain.Entities.Loans;
 using Mabill.Domain.Entities.Organizations;
 using Mabill.Domain.Enums;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,6 +29,7 @@ namespace Mabill.Domain.Entities.Users
         #region Staff
         [NotMapped]
         public decimal SumOfGivenLoans { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public StaffRole? Role { get; set; } = null;
 
         [JsonIgnore]

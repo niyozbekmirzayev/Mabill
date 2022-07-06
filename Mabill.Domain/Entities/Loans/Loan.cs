@@ -4,6 +4,7 @@ using Mabill.Domain.Entities.Loanees;
 using Mabill.Domain.Entities.Users;
 using Mabill.Domain.Enums;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,6 +18,7 @@ namespace Mabill.Domain.Entities.Loans
         [Required]
         public decimal Amount { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public Currency? CurrencyType { get; set; }
 
         public string CustomCurrencyType { get; set; } = null;

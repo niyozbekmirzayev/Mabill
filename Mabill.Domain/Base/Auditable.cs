@@ -1,4 +1,6 @@
 ﻿using Mabill.Domain.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,6 +9,7 @@ namespace Mabill.Domain.Base
     public class Auditable : BaseEntity
     {
         [Required]
+        [JsonConverter(typeof(StringEnumConverter))]
         public ObjectStatus Status { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
