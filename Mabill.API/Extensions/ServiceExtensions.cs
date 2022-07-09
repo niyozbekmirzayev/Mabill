@@ -23,6 +23,10 @@ namespace Mabill.API.Extensions
             services.AddScoped<ILoanRepository, LoanRepository>();
 
             services.AddScoped<ILoaneeRepository, LoaneeRepository>();
+
+            services.AddScoped<IStaffInOrganizationRepository, StaffInOrganizationRepository>();
+
+            services.AddScoped<ILoaneeBalanceInJournalRepository, LoaneeBalanceInJournalRepository>();
         }
     }
 }

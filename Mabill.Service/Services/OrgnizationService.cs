@@ -2,6 +2,7 @@
 using Mabill.Data.IRepositories;
 using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Organizations;
+using Mabill.Domain.Entities.StaffsInOrganizations;
 using Mabill.Domain.Enums;
 using Mabill.Service.Dtos.Organizations;
 using Mabill.Service.Extensions;
@@ -24,12 +25,15 @@ namespace Mabill.Service.Services
         private readonly IUserRepository userRepository;
         private readonly IJournalRepository journalRepository;
         private readonly ILoanRepository loanRepository;
+        private readonly ILoaneeBalanceInJournalRepository loaneeBalanceInJournalRepository;
+        private readonly IStaffInOrganizationRepository staffInOrganizationRepository;
         private readonly HttpContextHelper httpContextHelper;
 
         public OrgnizationService(IOrganizationRepository IOrganizationRepository,
             IMapper mapper, IHttpContextAccessor httpContextAccessor,
             IUserRepository userRepository, IJournalRepository journalRepository,
-            ILoanRepository loanRepository)
+            ILoanRepository loanRepository, ILoaneeBalanceInJournalRepository loaneeBalanceInJournalRepository,
+            IStaffInOrganizationRepository staffInOrganizationRepository)
         {
             httpContextHelper = new HttpContextHelper(httpContextAccessor);
             organizationRepository = IOrganizationRepository;
@@ -37,6 +41,8 @@ namespace Mabill.Service.Services
             this.userRepository = userRepository;
             this.journalRepository = journalRepository;
             this.loanRepository = loanRepository;
+            this.loaneeBalanceInJournalRepository = loaneeBalanceInJournalRepository;
+            this.staffInOrganizationRepository = staffInOrganizationRepository;
         }
 
        /* public async Task<BaseResponse<bool>> ChangeOwner(ChangeOrganizationOwnerDto changeOrganizationOwnerDto)
@@ -84,7 +90,7 @@ namespace Mabill.Service.Services
                 return response;
             }
             #endregion
-        }
+        }*/
 
         public async Task<BaseResponse<Organization>> CreateAsync(CreateOrganizationDto createOrganizationDto)
         {
@@ -113,12 +119,21 @@ namespace Mabill.Service.Services
             createOrganizationDto.Password = createOrganizationDto.Password.EncodeInSha256();
             var mappedOrganization = mapper.Map<Organization>(createOrganizationDto);
 
-            var owner = await userRepository.GetAsync(p => p.Id == currentUser.Id);
-            owner.Role = StaffRole.Owner;
+            var owner = await userRepository.GetAsync(p => p.Id == currentUser.Id && p.Status != ObjectStatus.Deleted, false);
+
+            if (owner == null)
+            {
+                response.Error = new BaseError(401, "User not found");
+
+                return response;
+            }
 
             mappedOrganization.Create(currentUser.Id);
             var createdOrganization = await organizationRepository.CreateAsync(mappedOrganization);
-            createdOrganization.Staffs.Add(owner);
+
+            var staffInOrganization = new StaffInOrganization(owner.Id, createdOrganization.Id, StaffRole.Owner);
+
+            await staffInOrganizationRepository.CreateAsync(staffInOrganization);
 
             await organizationRepository.SaveChangesAsync();
             response.Data = createdOrganization;
@@ -126,7 +141,7 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public async Task<BaseResponse<bool>> DeleteAsync(DeleteOrganizationDto deleteOrganizationDto)
+       /* public async Task<BaseResponse<bool>> DeleteAsync(DeleteOrganizationDto deleteOrganizationDto)
         {
             var response = new BaseResponse<bool>();
             var currentUser = httpContextHelper.GetCurrentUser();

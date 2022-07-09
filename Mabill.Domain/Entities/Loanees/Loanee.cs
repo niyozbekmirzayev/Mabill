@@ -1,5 +1,4 @@
 ﻿using Mabill.Domain.Base;
-using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.LoaneesBalancesInJournals;
 using Mabill.Domain.Entities.Loans;
 using Mabill.Domain.Entities.Users;

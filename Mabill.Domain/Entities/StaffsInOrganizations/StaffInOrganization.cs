@@ -11,6 +11,13 @@ namespace Mabill.Domain.Entities.StaffsInOrganizations
 {
     public class StaffInOrganization : BaseEntity
     {
+        public StaffInOrganization(Guid userId, Guid organizationId, StaffRole role)
+        {
+            UserId = userId;
+            OrganizationId = organizationId;
+            Role = role;
+        }
+
         [NotMapped]
         public decimal SumOfGivenLoans { get; set; }
         [JsonIgnore]

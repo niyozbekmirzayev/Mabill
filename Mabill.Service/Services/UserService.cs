@@ -30,21 +30,21 @@ namespace Mabill.Service.Services
             this.mapper = mapper;
         }
 
-        public async Task<BaseResponse<User>> CreateAsync(CreateUserDto user)
+        public async Task<BaseResponse<User>> CreateAsync(CreateUserDto createUserDto)
         {
             var response = new BaseResponse<User>();
 
             #region Date validation
-            if (user == null)
+            if (createUserDto == null)
             {
                 response.Error = new BaseError(400, "User is null");
 
                 return response;
             }
 
-            if (!String.IsNullOrEmpty(user.Email))
+            if (!String.IsNullOrEmpty(createUserDto.Email))
             {
-                var exsistEmail = await userRepository.GetAsync(x => x.Email == user.Email && x.Status != ObjectStatus.Deleted);
+                var exsistEmail = await userRepository.GetAsync(x => x.Email == createUserDto.Email && x.Status != ObjectStatus.Deleted);
 
                 if (exsistEmail != null)
                 {
@@ -54,7 +54,7 @@ namespace Mabill.Service.Services
                 }
             }
 
-            var exsitUsername = await userRepository.GetAsync(x => x.Username == user.Username.ToLower() && x.Status != ObjectStatus.Deleted);
+            var exsitUsername = await userRepository.GetAsync(x => x.Username == createUserDto.Username.ToLower() && x.Status != ObjectStatus.Deleted);
             if (exsitUsername != null)
             {
                 response.Error = new BaseError(409, "User with same username already exists");
@@ -62,7 +62,7 @@ namespace Mabill.Service.Services
                 return response;
             }
 
-            var exsitPhoneNumber = await userRepository.GetAsync(x => x.PhoneNumber == user.PhoneNumber && x.Status != ObjectStatus.Deleted);
+            var exsitPhoneNumber = await userRepository.GetAsync(x => x.PhoneNumber == createUserDto.PhoneNumber && x.Status != ObjectStatus.Deleted);
             if (exsitPhoneNumber != null)
             {
                 response.Error = new BaseError(409, "User with same phone number already exists");
@@ -71,8 +71,8 @@ namespace Mabill.Service.Services
             }
             #endregion
 
-            user.Username = user.Username.ToLower();
-            var newUser = mapper.Map<User>(user);
+            createUserDto.Username = createUserDto.Username.ToLower();
+            var newUser = mapper.Map<User>(createUserDto);
             newUser.Create();
             newUser.Password = newUser.Password.EncodeInSha256();
             var createdUser = await userRepository.CreateAsync(newUser);
@@ -82,12 +82,12 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public async Task<BaseResponse<bool>> DeleteAsync(DeleteUserProfileDto user)
+        public async Task<BaseResponse<bool>> DeleteAsync(DeleteUserProfileDto deleteUserDto)
         {
             var response = new BaseResponse<bool>();
 
             #region Data validation
-            if (user == null)
+            if (deleteUserDto == null)
             {
                 response.Error = new BaseError(400, "User is null");
 
@@ -96,7 +96,7 @@ namespace Mabill.Service.Services
 
             var currentUser = httpContextHelper.GetCurrentUser();
 
-            var exsistUser = await userRepository.GetAsync(x => x.Id == currentUser.Id && x.Password == user.Password.EncodeInSha256() &&
+            var exsistUser = await userRepository.GetAsync(x => x.Id == currentUser.Id && x.Password == deleteUserDto.Password.EncodeInSha256() &&
                                                            x.Status != ObjectStatus.Deleted);
             if (exsistUser == null)
             {
@@ -113,22 +113,22 @@ namespace Mabill.Service.Services
             return response;
         }
 
-       /* public BaseResponse<IEnumerable<User>> GetAll(Expression<Func<User, bool>> expression)
+        public BaseResponse<IEnumerable<User>> GetAll(Expression<Func<User, bool>> expression)
         {
             var response = new BaseResponse<IEnumerable<User>>();
 
-            var users = userRepository.GetAll(expression).Include(user => user.Organization).AsEnumerable();
+            var users = userRepository.GetAll(expression).AsEnumerable();
 
             response.Data = users;
 
             return response;
-        }*/
+        }
 
         public async Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression)
         {
             var response = new BaseResponse<User>();
 
-            var user = await userRepository.GetAsync(expression);
+            var user = userRepository.GetAll(expression).Include(user => user.Occupations).Include(user => user.BalanceInJournals).FirstOrDefault();
 
             if (user == null)
             {
@@ -140,12 +140,12 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public async Task<BaseResponse<User>> UpdateProfileAsync(UpdateUserProfileDto user)
+        public async Task<BaseResponse<User>> UpdateProfileAsync(UpdateUserProfileDto updateUserProfileDto)
         {
             var response = new BaseResponse<User>();
 
             #region Data validation
-            if (user == null)
+            if (updateUserProfileDto == null)
             {
                 response.Error = new BaseError(400, "User is null");
 
@@ -163,9 +163,9 @@ namespace Mabill.Service.Services
                 return response;
             }
 
-            if (!String.IsNullOrEmpty(user.Email))
+            if (!String.IsNullOrEmpty(updateUserProfileDto.Email))
             {
-                var exsistEmail = await userRepository.GetAsync(x => x.Email == user.Email && x.Status != ObjectStatus.Deleted);
+                var exsistEmail = await userRepository.GetAsync(x => x.Email == updateUserProfileDto.Email && x.Status != ObjectStatus.Deleted);
 
                 if (exsistEmail != null && exsistEmail.Id != currentUser.Id)
                 {
@@ -176,9 +176,9 @@ namespace Mabill.Service.Services
             }
 
 
-            if (!String.IsNullOrEmpty(user.Username))
+            if (!String.IsNullOrEmpty(updateUserProfileDto.Username))
             {
-                var exsitUsername = await userRepository.GetAsync(x => x.Username == user.Username.ToLower() && x.Status != ObjectStatus.Deleted);
+                var exsitUsername = await userRepository.GetAsync(x => x.Username == updateUserProfileDto.Username.ToLower() && x.Status != ObjectStatus.Deleted);
 
                 if (exsitUsername != null && exsitUsername.Id != currentUser.Id)
                 {
@@ -188,9 +188,9 @@ namespace Mabill.Service.Services
                 }
             }
 
-            if (!String.IsNullOrEmpty(user.PhoneNumber))
+            if (!String.IsNullOrEmpty(updateUserProfileDto.PhoneNumber))
             {
-                var exsitPhoneNumber = await userRepository.GetAsync(x => x.PhoneNumber == user.PhoneNumber && x.Status != ObjectStatus.Deleted);
+                var exsitPhoneNumber = await userRepository.GetAsync(x => x.PhoneNumber == updateUserProfileDto.PhoneNumber && x.Status != ObjectStatus.Deleted);
 
                 if (exsitPhoneNumber != null && exsitPhoneNumber.Id != currentUser.Id)
                 {
@@ -201,7 +201,7 @@ namespace Mabill.Service.Services
             }
             #endregion
 
-            var mappedUser = mapper.Map(user, exsistUser);
+            var mappedUser = mapper.Map(updateUserProfileDto, exsistUser);
             mappedUser.Modify();
             var updatedUser = await userRepository.UpdateAsync(mappedUser);
             response.Data = updatedUser;
@@ -209,12 +209,12 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public async Task<BaseResponse<bool>> UpdatePasswordAsync(UpdateUserPasswordDto user)
+        public async Task<BaseResponse<bool>> UpdatePasswordAsync(UpdateUserPasswordDto updateUserPasswordDto)
         {
             var response = new BaseResponse<bool>();
 
             #region Data validation
-            if (user == null)
+            if (updateUserPasswordDto == null)
             {
                 response.Error = new BaseError(400, "User is null");
 
@@ -223,7 +223,7 @@ namespace Mabill.Service.Services
 
             var currentUser = httpContextHelper.GetCurrentUser();
 
-            var exsistUser = await userRepository.GetAsync(x => x.Id == currentUser.Id && x.Password == user.Password.EncodeInSha256() &&
+            var exsistUser = await userRepository.GetAsync(x => x.Id == currentUser.Id && x.Password == updateUserPasswordDto.Password.EncodeInSha256() &&
                                                            x.Status != ObjectStatus.Deleted);
 
             if (exsistUser == null)
@@ -234,7 +234,7 @@ namespace Mabill.Service.Services
             }
             #endregion
 
-            exsistUser.Password = user.NewPassword.EncodeInSha256();
+            exsistUser.Password = updateUserPasswordDto.NewPassword.EncodeInSha256();
             exsistUser.Modify();
             await userRepository.UpdateAsync(exsistUser);
             response.Data = true;

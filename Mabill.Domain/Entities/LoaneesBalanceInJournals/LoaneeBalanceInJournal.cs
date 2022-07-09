@@ -4,11 +4,7 @@ using Mabill.Domain.Entities.Loanees;
 using Mabill.Domain.Entities.Users;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mabill.Domain.Entities.LoaneesBalancesInJournals
 {
@@ -18,7 +14,7 @@ namespace Mabill.Domain.Entities.LoaneesBalancesInJournals
         [JsonIgnore]
         public Guid? UserId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public User User { get; set; } 
+        public User User { get; set; }
         #endregion
 
         [JsonIgnore]

@@ -1,7 +1,6 @@
 ﻿using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Journals;
 using Mabill.Domain.Entities.StaffsInOrganizations;
-using Mabill.Domain.Entities.Users;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
