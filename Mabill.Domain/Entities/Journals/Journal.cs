@@ -1,5 +1,6 @@
 ﻿using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Loanees;
+using Mabill.Domain.Entities.LoaneesBalancesInJournals;
 using Mabill.Domain.Entities.Loans;
 using Mabill.Domain.Entities.Organizations;
 using Newtonsoft.Json;
@@ -32,5 +33,6 @@ namespace Mabill.Domain.Entities.Journals
 
         public virtual ICollection<Loan> Loans { get; set; }
         public virtual ICollection<Loanee> Loanees { get; set; }
+        public virtual ICollection<LoaneeBalanceInJournal> LoaneesBalance { get; set; }
     }
 }

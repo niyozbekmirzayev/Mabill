@@ -1,4 +1,5 @@
 ﻿using Mabill.Domain.Base;
+using Mabill.Domain.Entities.LoaneesBalancesInJournals;
 using Mabill.Domain.Entities.Loans;
 using Mabill.Domain.Entities.StaffsInOrganizations;
 using Newtonsoft.Json;
@@ -13,7 +14,8 @@ namespace Mabill.Domain.Entities.Users
         public User()
         {
             Loans = new List<Loan>();
-            Occupations = new List<StaffInOrganization>
+            Occupations = new List<StaffInOrganization>();
+            BalanceInJournals = new List<LoaneeBalanceInJournal>();
         }
 
         #region Common
@@ -27,10 +29,12 @@ namespace Mabill.Domain.Entities.Users
         public virtual ICollection<StaffInOrganization> Occupations { get; set; }
 
         #region Loanee
+        public virtual ICollection<LoaneeBalanceInJournal> BalanceInJournals { get; set; }
+
         [NotMapped]
-        public decimal SumOfLoans { get; set; }
+        public decimal SumOfLoansBetweenSpecificTime { get; set; }
         [NotMapped]
-        public decimal SumOfRepaidLoans { get; set; }
+        public decimal SumOfRepaidLoansBeetweenSpecificTime { get; set; }
 
         [InverseProperty(nameof(Loan.User))]
         public virtual ICollection<Loan> Loans { get; set; }

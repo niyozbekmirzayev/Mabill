@@ -12,7 +12,7 @@ namespace Mabill.Domain.Entities.Organizations
         public Organization()
         {
             Journals = new List<Journal>();
-            Staffs = new List<StaffInOrganization>
+            Staffs = new List<StaffInOrganization>();
         }
 
         [Required]

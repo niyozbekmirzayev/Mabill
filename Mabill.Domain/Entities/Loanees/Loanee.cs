@@ -1,5 +1,6 @@
 ﻿using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Journals;
+using Mabill.Domain.Entities.LoaneesBalancesInJournals;
 using Mabill.Domain.Entities.Loans;
 using Mabill.Domain.Entities.Users;
 using Newtonsoft.Json;
@@ -13,27 +14,23 @@ namespace Mabill.Domain.Entities.Loanees
     {
         public Loanee()
         {
-            this.Loans = new List<Loan>();
+            Loans = new List<Loan>();
+            BalanceInJournals = new List<LoaneeBalanceInJournal>();
         }
 
         public virtual ICollection<Loan> Loans { get; set; }
+        public virtual ICollection<LoaneeBalanceInJournal> BalanceInJournals { get; set; }
 
         public string Description { get; set; }
         [NotMapped]
-        public decimal SumOfLoans { get; set; }
+        public decimal SumOfLoansBetweenSpecificTime { get; set; }
         [NotMapped]
-        public decimal SumOfRepaidLoans { get; set; }
+        public decimal SumOfRepaidLoansBeetweenSpecificTime { get; set; }
 
         [JsonIgnore]
         public Guid AddedById { get; set; }
 
         [ForeignKey(nameof(AddedById))]
         public virtual User AddedBy { get; set; }
-
-        [JsonIgnore]
-        public Guid JournalId { get; set; }
-
-        [ForeignKey(nameof(JournalId))]
-        public virtual Journal Journal { get; set; }
     }
 }
