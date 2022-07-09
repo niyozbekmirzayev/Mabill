@@ -1,10 +1,7 @@
 ﻿using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Loans;
-using Mabill.Domain.Entities.Organizations;
-using Mabill.Domain.Enums;
+using Mabill.Domain.Entities.StaffsInOrganizations;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,6 +13,7 @@ namespace Mabill.Domain.Entities.Users
         public User()
         {
             Loans = new List<Loan>();
+            Occupations = new List<StaffInOrganization>
         }
 
         #region Common
@@ -26,19 +24,7 @@ namespace Mabill.Domain.Entities.Users
         public string Password { get; set; }
         #endregion
 
-        #region Staff
-        [NotMapped]
-        public decimal SumOfGivenLoans { get; set; }
-        [Column(TypeName = "varchar(24)")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public StaffRole? Role { get; set; } = null;
-
-        [JsonIgnore]
-        public Guid? OrganizationId { get; set; }
-
-        [ForeignKey(nameof(OrganizationId))]
-        public virtual Organization Organization { get; set; }
-        #endregion
+        public virtual ICollection<StaffInOrganization> Occupations { get; set; }
 
         #region Loanee
         [NotMapped]

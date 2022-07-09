@@ -10,11 +10,11 @@ namespace Mabill.Service.Interfaces
 {
     public interface IUserService
     {
-        BaseResponse<IEnumerable<User>> GetAll(Expression<Func<User, bool>> expression = null);
+       /* BaseResponse<IEnumerable<User>> GetAll(Expression<Func<User, bool>> expression = null);
         Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression);
         Task<BaseResponse<User>> CreateAsync(CreateUserDto user);
         Task<BaseResponse<User>> UpdateProfileAsync(UpdateUserProfileDto user);
         Task<BaseResponse<bool>> UpdatePasswordAsync(UpdateUserPasswordDto user);
-        Task<BaseResponse<bool>> DeleteAsync(DeleteUserProfileDto user);
+        Task<BaseResponse<bool>> DeleteAsync(DeleteUserProfileDto user);*/
     }
 }

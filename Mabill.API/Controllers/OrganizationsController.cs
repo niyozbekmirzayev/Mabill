@@ -13,7 +13,7 @@ namespace Mabill.API.Controllers
     [Route("api/[controller]/[action]")]
     public class OrganizationsController : Controller
     {
-        private readonly IOrganizationService organizationService;
+       /* private readonly IOrganizationService organizationService;
         public OrganizationsController(IOrganizationService organizationService)
         {
             this.organizationService = organizationService;
@@ -38,10 +38,10 @@ namespace Mabill.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<BaseResponse<Organization>>> Get(Guid id)
+        public async Task<ActionResult<BaseResponse<Organization>>> Get(string organizationName)
         {
             Console.WriteLine("---> Getting organization....");
-            var result = await organizationService.GetAsync(o => o.Id == id);
+            var result = await organizationService.GetAsync(o => o.Name.Trim().ToLower() == organizationName.Trim().ToLower());
 
             // Identification of error 
             if (result.Error is not null)
@@ -70,7 +70,7 @@ namespace Mabill.API.Controllers
             }
 
             return Ok(result);
-        }
+        }*/
     }
 }
 

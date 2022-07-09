@@ -113,7 +113,7 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public BaseResponse<IEnumerable<User>> GetAll(Expression<Func<User, bool>> expression)
+       /* public BaseResponse<IEnumerable<User>> GetAll(Expression<Func<User, bool>> expression)
         {
             var response = new BaseResponse<IEnumerable<User>>();
 
@@ -122,7 +122,7 @@ namespace Mabill.Service.Services
             response.Data = users;
 
             return response;
-        }
+        }*/
 
         public async Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression)
         {

@@ -15,7 +15,7 @@ namespace Mabill.API.Controllers
     [Route("api/[controller]/[action]")]
     public class UsersController : Controller
     {
-        private IUserService userService;
+       /* private IUserService userService;
 
         public UsersController(IUserService userService)
         {
@@ -117,6 +117,6 @@ namespace Mabill.API.Controllers
             }
 
             return Ok(result);
-        }
+        }*/
     }
 }

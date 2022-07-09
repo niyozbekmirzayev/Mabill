@@ -238,6 +238,10 @@ namespace Mabill.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(24)");
@@ -248,6 +252,31 @@ namespace Mabill.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Organizations");
+                });
+
+            modelBuilder.Entity("Mabill.Domain.Entities.StaffsInOrganizations.StaffInOrganization", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("varchar(24)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StaffInOrganization");
                 });
 
             modelBuilder.Entity("Mabill.Domain.Entities.Users.User", b =>
@@ -291,9 +320,6 @@ namespace Mabill.Data.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
@@ -301,9 +327,6 @@ namespace Mabill.Data.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("varchar(24)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -314,8 +337,6 @@ namespace Mabill.Data.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Users");
                 });
@@ -387,13 +408,23 @@ namespace Mabill.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Mabill.Domain.Entities.Users.User", b =>
+            modelBuilder.Entity("Mabill.Domain.Entities.StaffsInOrganizations.StaffInOrganization", b =>
                 {
                     b.HasOne("Mabill.Domain.Entities.Organizations.Organization", "Organization")
                         .WithMany("Staffs")
-                        .HasForeignKey("OrganizationId");
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mabill.Domain.Entities.Users.User", "User")
+                        .WithMany("Occupations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Organization");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Mabill.Domain.Entities.Journals.Journal", b =>
@@ -418,6 +449,8 @@ namespace Mabill.Data.Migrations
             modelBuilder.Entity("Mabill.Domain.Entities.Users.User", b =>
                 {
                     b.Navigation("Loans");
+
+                    b.Navigation("Occupations");
                 });
 #pragma warning restore 612, 618
         }

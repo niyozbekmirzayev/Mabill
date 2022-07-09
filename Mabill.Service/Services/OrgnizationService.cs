@@ -39,6 +39,53 @@ namespace Mabill.Service.Services
             this.loanRepository = loanRepository;
         }
 
+       /* public async Task<BaseResponse<bool>> ChangeOwner(ChangeOrganizationOwnerDto changeOrganizationOwnerDto)
+        {
+            var response = new BaseResponse<bool>();
+
+            var currentUser = httpContextHelper.GetCurrentUser();
+
+            var owner = await userRepository.GetAll(p => p.Id == currentUser.Id && p.Status != ObjectStatus.Deleted, false).Include(o => o.Organization).FirstOrDefaultAsync();
+
+            #region Data validation
+            if (owner == null)
+            {
+                response.Error = new BaseError(401, "User not found");
+
+                return response;
+            }
+
+            if (owner.Organization == null || owner.Organization.Status == ObjectStatus.Deleted || owner.Role == null || owner.Role != StaffRole.Owner)
+            {
+                response.Error = new BaseError(401, "User has no organization");
+
+                return response;
+            }
+
+            if (changeOrganizationOwnerDto.OrganizationPassword.EncodeInSha256() != owner.Organization.Password.EncodeInSha256())
+            {
+                response.Error = new BaseError(401, "Invalid password");
+
+                return response;
+            }
+
+            var newOwner = await userRepository.GetAsync(u => u.Id == changeOrganizationOwnerDto.NewOwnerId && u.Status != ObjectStatus.Deleted);
+            if (newOwner == null)
+            {
+                response.Error = new BaseError(401, "User not found");
+
+                return response;
+            }
+
+            if (newOwner.Role! || newOwner.Organization.Status == ObjectStatus.Deleted)
+            {
+                response.Error = new BaseError(401, "User has no organization");
+
+                return response;
+            }
+            #endregion
+        }
+
         public async Task<BaseResponse<Organization>> CreateAsync(CreateOrganizationDto createOrganizationDto)
         {
             var response = new BaseResponse<Organization>();
@@ -52,7 +99,7 @@ namespace Mabill.Service.Services
             }
 
             var exsistOrganization = await organizationRepository.GetAsync(o => o.Status != ObjectStatus.Deleted &&
-                                                                          o.Name == createOrganizationDto.Name);
+                                                                          o.Name.Trim().ToLower() == createOrganizationDto.Name.Trim().ToLower());
 
             if (exsistOrganization != null)
             {
@@ -79,12 +126,12 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public async Task<BaseResponse<bool>> DeleteAsync(DeleteOrganizationDto organization)
+        public async Task<BaseResponse<bool>> DeleteAsync(DeleteOrganizationDto deleteOrganizationDto)
         {
             var response = new BaseResponse<bool>();
             var currentUser = httpContextHelper.GetCurrentUser();
 
-            var owner = userRepository.GetAll(p => p.Id == currentUser.Id && p.Organization.Password == organization.OrganizationPassword.EncodeInSha256())
+            var owner = userRepository.GetAll(p => p.Id == currentUser.Id && p.Status != ObjectStatus.Deleted, false)
                 .Include(user => user.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loans).Where(p => p.Status != ObjectStatus.Deleted)
                 .Include(k => k.Organization).ThenInclude(o => o.Journals.Where(j => j.Status != ObjectStatus.Deleted)).ThenInclude(l => l.Loanees).Where(p => p.Status != ObjectStatus.Deleted)
                 .AsSplitQuery()
@@ -93,14 +140,21 @@ namespace Mabill.Service.Services
             #region Data validation
             if (owner == null)
             {
-                response.Error = new BaseError(401, "Invalid password");
+                response.Error = new BaseError(401, "User not found");
 
                 return response;
             }
 
-            if (owner.Organization == null || owner.Role == null || owner.Role != StaffRole.Owner)
+            if (owner.Organization == null || owner.Organization.Status == ObjectStatus.Deleted || owner.Role == null || owner.Role != StaffRole.Owner)
             {
                 response.Error = new BaseError(401, "User has no organization");
+
+                return response;
+            }
+
+            if (deleteOrganizationDto.OrganizationPassword.EncodeInSha256() != owner.Organization.Password.EncodeInSha256())
+            {
+                response.Error = new BaseError(401, "Invalid password");
 
                 return response;
             }
@@ -112,7 +166,6 @@ namespace Mabill.Service.Services
             owner.Organization.Delete(owner.Id);
 
             await organizationRepository.SaveChangesAsync();
-
             response.Data = true;
 
             return response;
@@ -139,9 +192,9 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public Task<BaseResponse<Organization>> UpdateAysnc(Organization organization)
+        public Task<BaseResponse<Organization>> UpdateAysnc(Organization updateOrganizationDto)
         {
             throw new NotImplementedException();
-        }
+        }*/
     }
 }
