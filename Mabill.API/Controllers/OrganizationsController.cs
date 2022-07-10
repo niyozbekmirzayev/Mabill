@@ -1,4 +1,5 @@
 ﻿using Mabill.API.Helpers;
+using Mabill.Domain.Enums;
 using Mabill.Service.Dtos.Organizations;
 using Mabill.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,15 @@ namespace Mabill.API.Controllers
         {
             Console.WriteLine("---> Deleting organization....");
             var result = await organizationService.DeleteAsync(deleteOrganizationDto);
+
+            return webHelperFunctions.SentResultWithStatusCode(result);
+        }
+
+        [HttpGet]
+        public IActionResult GetAllActiveOrganization()
+        {
+            Console.WriteLine("---> Getting organization....");
+            var result = organizationService.GetAll(x => x.Status != ObjectStatus.Deleted);
 
             return webHelperFunctions.SentResultWithStatusCode(result);
         }
