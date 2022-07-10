@@ -2,10 +2,10 @@
 using Mabill.Domain.Entities.Organizations;
 using Mabill.Domain.Entities.Users;
 using Mabill.Domain.Enums;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace Mabill.Domain.Entities.StaffsInOrganizations
 {
@@ -20,6 +20,7 @@ namespace Mabill.Domain.Entities.StaffsInOrganizations
 
         [NotMapped]
         public decimal SumOfGivenLoans { get; set; }
+
         [JsonIgnore]
         public Guid UserId { get; set; }
         [ForeignKey(nameof(UserId))]

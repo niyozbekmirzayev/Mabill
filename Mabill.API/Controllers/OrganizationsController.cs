@@ -1,6 +1,4 @@
 ﻿using Mabill.API.Helpers;
-using Mabill.Domain.Base;
-using Mabill.Domain.Entities.Organizations;
 using Mabill.Service.Dtos.Organizations;
 using Mabill.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -29,53 +27,28 @@ namespace Mabill.API.Controllers
         {
             Console.WriteLine("---> Creating organization....");
             var result = await organizationService.CreateAsync(organization);
+
             return webHelperFunctions.SentResultWithStatusCode(result);
-
-           /* // Identification of error 
-            if (result.Error is not null)
-            {
-                if (result.Error.Code == 404) return NotFound(result);
-                else if (result.Error.Code == 400) return BadRequest(result);
-                else if (result.Error.Code == 409) return Conflict(result);
-            }
-
-            return Ok(result);*/
         }
 
-       /* [HttpGet]
-        public async Task<ActionResult<BaseResponse<Organization>>> Get(string organizationName)
+        [HttpGet]
+        public async Task<IActionResult> Get(string organizationName)
         {
             Console.WriteLine("---> Getting organization....");
             var result = await organizationService.GetAsync(o => o.Name.Trim().ToLower() == organizationName.Trim().ToLower());
 
-            // Identification of error 
-            if (result.Error is not null)
-            {
-                if (result.Error.Code == 404) return NotFound(result);
-                else if (result.Error.Code == 400) return BadRequest(result);
-                else if (result.Error.Code == 409) return Conflict(result);
-            }
-
-            return Ok(result);
+            return webHelperFunctions.SentResultWithStatusCode(result);
         }
 
         [HttpDelete]
         [Authorize]
-        public async Task<ActionResult<BaseResponse<Organization>>> Delete(DeleteOrganizationDto deleteOrganizationDto)
+        public async Task<IActionResult> Delete([FromQuery] DeleteOrganizationDto deleteOrganizationDto)
         {
             Console.WriteLine("---> Deleting organization....");
             var result = await organizationService.DeleteAsync(deleteOrganizationDto);
 
-            // Identification of error 
-            if (result.Error is not null)
-            {
-                if (result.Error.Code == 404) return NotFound(result);
-                else if (result.Error.Code == 400) return BadRequest(result);
-                else if (result.Error.Code == 409) return Conflict(result);
-            }
-
-            return Ok(result);
-        }*/
+            return webHelperFunctions.SentResultWithStatusCode(result);
+        }
     }
 }
 

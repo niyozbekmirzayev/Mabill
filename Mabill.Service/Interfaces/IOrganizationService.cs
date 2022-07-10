@@ -10,11 +10,11 @@ namespace Mabill.Service.Interfaces
 {
     public interface IOrganizationService
     {
-        /*BaseResponse<IEnumerable<Organization>> GetAll(Expression<Func<Organization, bool>> expression = null);
-        Task<BaseResponse<Organization>> GetAsync(Expression<Func<Organization, bool>> expression);*/
+        BaseResponse<IEnumerable<Organization>> GetAll(Expression<Func<Organization, bool>> expression = null);
+        Task<BaseResponse<Organization>> GetAsync(Expression<Func<Organization, bool>> expression);
         Task<BaseResponse<Organization>> CreateAsync(CreateOrganizationDto createOrganizationDto);
-       /* Task<BaseResponse<Organization>> UpdateAysnc(Organization updateOrganizationDto);
         Task<BaseResponse<bool>> DeleteAsync(DeleteOrganizationDto deleteOrganizationDto);
-        Task<BaseResponse<bool>> ChangeOwner(ChangeOrganizationOwnerDto changeOrganizationOwnerDto);*/
+        /* Task<BaseResponse<Organization>> UpdateAysnc(Organization updateOrganizationDto);
+         Task<BaseResponse<bool>> ChangeOwner(ChangeOrganizationOwnerDto changeOrganizationOwnerDto);*/
     }
 }

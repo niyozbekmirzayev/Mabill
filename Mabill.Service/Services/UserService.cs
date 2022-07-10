@@ -124,11 +124,11 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public BaseResponse<User> GetAsync(Expression<Func<User, bool>> expression)
+        public async Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression)
         {
             var response = new BaseResponse<User>();
 
-            var user = userRepository.GetAll(expression).Include(user => user.Occupations).Include(user => user.BalanceInJournals).FirstOrDefault();
+            var user = await userRepository.GetAll(expression).Include(user => user.Occupations).Include(user => user.BalanceInJournals).FirstOrDefaultAsync();
 
             if (user == null)
             {

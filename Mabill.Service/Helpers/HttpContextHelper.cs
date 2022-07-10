@@ -1,5 +1,4 @@
-﻿using Mabill.Domain.Enums;
-using Mabill.Service.Dtos.Users;
+﻿using Mabill.Service.Dtos.Users;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Security.Claims;
