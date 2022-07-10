@@ -3,6 +3,7 @@
     public enum StaffRole
     {
         Owner = 1,
+        ExOwner,
         Manager,
         Inferior
     }

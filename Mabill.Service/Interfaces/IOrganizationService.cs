@@ -1,5 +1,6 @@
 ﻿using Mabill.Domain.Base;
 using Mabill.Domain.Entities.Organizations;
+using Mabill.Domain.Entities.StaffsInOrganizations;
 using Mabill.Service.Dtos.Organizations;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Mabill.Service.Interfaces
         Task<BaseResponse<Organization>> GetAsync(Expression<Func<Organization, bool>> expression);
         Task<BaseResponse<Organization>> CreateAsync(CreateOrganizationDto createOrganizationDto);
         Task<BaseResponse<bool>> DeleteAsync(DeleteOrganizationDto deleteOrganizationDto);
-        /* Task<BaseResponse<Organization>> UpdateAysnc(Organization updateOrganizationDto);
-         Task<BaseResponse<bool>> ChangeOwner(ChangeOrganizationOwnerDto changeOrganizationOwnerDto);*/
+        /*Task<BaseResponse<Organization>> UpdateAysnc(Organization updateOrganizationDto);*/
+        Task<BaseResponse<StaffInOrganization>> ChangeOwner(ChangeOrganizationOwnerDto changeOrganizationOwnerDto);
     }
 }

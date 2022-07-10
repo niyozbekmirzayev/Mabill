@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mabill.Domain.Entities.StaffsInOrganizations
 {
-    public class StaffInOrganization : BaseEntity
+    public class StaffInOrganization : Auditable
     {
         public StaffInOrganization(Guid userId, Guid organizationId, StaffRole role)
         {

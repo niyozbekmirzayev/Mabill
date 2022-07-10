@@ -52,10 +52,20 @@ namespace Mabill.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllActiveOrganization()
+        public IActionResult GetAllActiveOrganizations()
         {
             Console.WriteLine("---> Getting organization....");
             var result = organizationService.GetAll(x => x.Status != ObjectStatus.Deleted);
+
+            return webHelperFunctions.SentResultWithStatusCode(result);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> ChangeOwner([FromQuery] ChangeOrganizationOwnerDto changeOrganizationOwnerDto)
+        {
+            Console.WriteLine("---> Changing owner....");
+            var result = await organizationService.ChangeOwner(changeOrganizationOwnerDto);
 
             return webHelperFunctions.SentResultWithStatusCode(result);
         }

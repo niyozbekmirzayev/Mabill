@@ -25,7 +25,7 @@ namespace Mabill.Service.Services
 
         public UserService(IUserRepository userRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
-            this.httpContextHelper = new HttpContextHelper(httpContextAccessor);
+            httpContextHelper = new HttpContextHelper(httpContextAccessor);
             this.userRepository = userRepository;
             this.mapper = mapper;
         }
@@ -100,7 +100,7 @@ namespace Mabill.Service.Services
                                                            x.Status != ObjectStatus.Deleted);
             if (exsistUser == null)
             {
-                response.Error = new BaseError(400, "User is not found");
+                response.Error = new BaseError(404, "User is not found");
 
                 return response;
             }
