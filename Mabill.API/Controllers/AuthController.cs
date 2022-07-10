@@ -30,7 +30,7 @@ namespace Mabill.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> CreateToken([FromBody] LoginDto loginParams)
         {
-            var user = await userRepository.GetAsync(user => user.Username == loginParams.Username.ToLower() &&
+            var user = await userRepository.GetAsync(user => user.Username == loginParams.Username.Trim().ToLower() &&
                                                        user.Password == loginParams.Password.EncodeInSha256() &&
                                                        user.Status != ObjectStatus.Deleted);
 

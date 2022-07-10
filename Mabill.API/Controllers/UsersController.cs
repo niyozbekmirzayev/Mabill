@@ -42,10 +42,10 @@ namespace Mabill.API.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<BaseResponse<User>>> GetUserById(Guid id)
+        public ActionResult<BaseResponse<User>> GetUserById(Guid id)
         {
             Console.WriteLine("---> Getting user....");
-            var result = await userService.GetAsync(p => p.Id == id && p.Status != ObjectStatus.Deleted);
+            var result = userService.GetAsync(p => p.Id == id && p.Status != ObjectStatus.Deleted);
 
             // Identification of error 
             if (result.Error is not null)

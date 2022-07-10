@@ -116,11 +116,7 @@ namespace Mabill.Service.Services
             #endregion
 
             var currentUser = httpContextHelper.GetCurrentUser();
-            createOrganizationDto.Password = createOrganizationDto.Password.EncodeInSha256();
-            var mappedOrganization = mapper.Map<Organization>(createOrganizationDto);
-
             var owner = await userRepository.GetAsync(p => p.Id == currentUser.Id && p.Status != ObjectStatus.Deleted, false);
-
             if (owner == null)
             {
                 response.Error = new BaseError(401, "User not found");
@@ -128,6 +124,8 @@ namespace Mabill.Service.Services
                 return response;
             }
 
+            createOrganizationDto.Password = createOrganizationDto.Password.EncodeInSha256();
+            var mappedOrganization = mapper.Map<Organization>(createOrganizationDto);
             mappedOrganization.Create(currentUser.Id);
             var createdOrganization = await organizationRepository.CreateAsync(mappedOrganization);
 

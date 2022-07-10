@@ -11,7 +11,7 @@ namespace Mabill.Service.Interfaces
     public interface IUserService
     {
         BaseResponse<IEnumerable<User>> GetAll(Expression<Func<User, bool>> expression = null);
-        Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression);
+        BaseResponse<User> GetAsync(Expression<Func<User, bool>> expression);
         Task<BaseResponse<User>> CreateAsync(CreateUserDto createUserDto);
         Task<BaseResponse<User>> UpdateProfileAsync(UpdateUserProfileDto updateUserProfileDto);
         Task<BaseResponse<bool>> UpdatePasswordAsync(UpdateUserPasswordDto updateUserPasswordDto);

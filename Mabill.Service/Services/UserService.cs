@@ -71,7 +71,7 @@ namespace Mabill.Service.Services
             }
             #endregion
 
-            createUserDto.Username = createUserDto.Username.ToLower();
+            createUserDto.Username = createUserDto.Username.Trim().ToLower();
             var newUser = mapper.Map<User>(createUserDto);
             newUser.Create();
             newUser.Password = newUser.Password.EncodeInSha256();
@@ -124,7 +124,7 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public async Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression)
+        public BaseResponse<User> GetAsync(Expression<Func<User, bool>> expression)
         {
             var response = new BaseResponse<User>();
 

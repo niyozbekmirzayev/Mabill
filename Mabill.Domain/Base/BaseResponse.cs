@@ -4,5 +4,6 @@
     {
         public T Data { get; set; }
         public BaseError Error { get; set; }
+        public bool Success { get; set; }
     }
 }

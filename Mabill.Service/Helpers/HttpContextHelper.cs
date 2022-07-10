@@ -23,8 +23,6 @@ namespace Mabill.Service.Helpers
             user.Id = Guid.Parse(userInfo.FindFirst("Id").Value);
             user.Username = userInfo.FindFirst(ClaimTypes.NameIdentifier).Value;
             user.PhoneNumber = userInfo.FindFirst(ClaimTypes.MobilePhone).Value;
-            Enum.TryParse(userInfo.FindFirst(ClaimTypes.Role).Value, out StaffRole role);
-            user.Role = role;
             user.FirstName = userInfo.FindFirst("FirstName").Value;
             user.LastName = userInfo.FindFirst("LastName").Value;
 
