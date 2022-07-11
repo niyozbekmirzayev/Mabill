@@ -204,7 +204,7 @@ namespace Mabill.Service.Services
             #endregion
 
             var mappedUser = mapper.Map(updateUserProfileDto, exsistUser);
-            mappedUser.Modify();
+            mappedUser.Modify(currentUser.Id);
             var updatedUser = await userRepository.UpdateAsync(mappedUser);
             response.Data = updatedUser;
 

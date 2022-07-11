@@ -53,7 +53,8 @@ namespace Mabill.Service.Services
 
             var owner = userRepository.GetAll(p => p.Id == currentUser.Id && p.Status != ObjectStatus.Deleted, false)
                .Include(user => user.Occupations.Where(o => o.Status != ObjectStatus.Deleted && o.OrganizationId == changeOrganizationOwnerDto.Id && o.Organization.Status != ObjectStatus.Deleted && o.Role == StaffRole.Owner && o.UserId == currentUser.Id))
-                    .ThenInclude(o => o.Organization).FirstOrDefault();
+                    .ThenInclude(o => o.Organization)
+               .FirstOrDefault();
 
             #region Data validation
             if (owner == null)
@@ -242,9 +243,49 @@ namespace Mabill.Service.Services
             return response;
         }
 
-        public Task<BaseResponse<Organization>> UpdateAysnc(Organization updateOrganizationDto)
+        public async Task<BaseResponse<Organization>> UpdateAysnc(UpdateOrganizationDto updateOrganizationDto)
         {
-            throw new NotImplementedException();
+            var response = new BaseResponse<Organization>();
+            var currentUser = httpContextHelper.GetCurrentUser();
+
+            var owner = await userRepository.GetAll(u => u.Id == currentUser.Id && u.Status != ObjectStatus.Deleted)
+                .Include(u => u.Occupations.Where(o => o.Status != ObjectStatus.Deleted && o.OrganizationId == updateOrganizationDto.Id && o.Role == StaffRole.Owner && o.Organization.Status != ObjectStatus.Deleted))
+                .ThenInclude(o => o.Organization)
+                .FirstOrDefaultAsync();
+
+            #region Data validation
+            if (owner == null) 
+            {
+                response.Error = new BaseError(404, "User not found");
+            }
+
+            if (owner.Occupations == null && !owner.Occupations.Any() && owner.Occupations.FirstOrDefault().Organization == null) 
+            {
+                response.Error = new BaseError(400, $"User has no owner role in organization");
+
+                return response;
+            }
+
+            if (!String.IsNullOrEmpty(updateOrganizationDto.NewName) && updateOrganizationDto.NewName != owner.Occupations.FirstOrDefault().Organization.Name)
+            {
+                var exsistOrganizationNames = organizationRepository.GetAll(o => o.Status != ObjectStatus.Deleted).Select(o => o.Name).ToList();
+
+                if(exsistOrganizationNames.Any(e => e == updateOrganizationDto.NewName)) 
+                {
+                    response.Error = new BaseError(409, "New name of organization already exsists");
+
+                    return response;
+                }
+            }
+            #endregion
+
+            var mappedOrganization = mapper.Map(updateOrganizationDto, owner.Occupations.FirstOrDefault().Organization);
+            mappedOrganization.Modify(currentUser.Id);
+            var updatedOrganization = await organizationRepository.UpdateAsync(mappedOrganization);
+            response.Data = mappedOrganization;
+
+            return response;
+
         }
     }
 }
