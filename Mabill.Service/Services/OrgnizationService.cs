@@ -52,7 +52,7 @@ namespace Mabill.Service.Services
             var currentUser = httpContextHelper.GetCurrentUser();
 
             var owner = userRepository.GetAll(p => p.Id == currentUser.Id && p.Status != ObjectStatus.Deleted, false)
-               .Include(user => user.Occupations.Where(o => o.OrganizationId == changeOrganizationOwnerDto.Id && o.Organization.Status != ObjectStatus.Deleted && o.Role == StaffRole.Owner && o.UserId == currentUser.Id))
+               .Include(user => user.Occupations.Where(o => o.Status != ObjectStatus.Deleted && o.OrganizationId == changeOrganizationOwnerDto.Id && o.Organization.Status != ObjectStatus.Deleted && o.Role == StaffRole.Owner && o.UserId == currentUser.Id))
                     .ThenInclude(o => o.Organization).FirstOrDefault();
 
             #region Data validation
@@ -63,7 +63,7 @@ namespace Mabill.Service.Services
                 return response;
             }
 
-            if (owner.Occupations.FirstOrDefault().Organization == null)
+            if (owner.Occupations == null || !owner.Occupations.Any() || owner.Occupations.FirstOrDefault().Organization == null)
             {
                 response.Error = new BaseError(400, $"User has no owner role in organization");
 
@@ -93,15 +93,25 @@ namespace Mabill.Service.Services
             }
             #endregion
 
-            owner.Occupations.FirstOrDefault().Role = StaffRole.ExOwner;
-            owner.Occupations.FirstOrDefault().Modify(owner.Id);
-            
+            owner.Occupations.FirstOrDefault(o => o.Status != ObjectStatus.Deleted && o.OrganizationId == changeOrganizationOwnerDto.Id && o.Organization.Status != ObjectStatus.Deleted && o.Role == StaffRole.Owner && o.UserId == currentUser.Id).Delete(owner.Id);
+            var exOwnerOccupation = new StaffInOrganization(owner.Id, changeOrganizationOwnerDto.Id, StaffRole.ExOwner);
+            exOwnerOccupation.Create(owner.Id);
+            var createdExOwnerOccupation = await staffInOrganizationRepository.CreateAsync(exOwnerOccupation);
+            owner.Occupations.Add(createdExOwnerOccupation);
+
+            var exOwnerOccupationsInHistory = staffInOrganizationRepository.GetAll(o => o.UserId == changeOrganizationOwnerDto.NewOwnerId && o.Status != ObjectStatus.Deleted && o.Role == StaffRole.ExOwner, false).ToList();
+            if (exOwnerOccupationsInHistory != null && exOwnerOccupationsInHistory.Any())
+            {
+                exOwnerOccupationsInHistory.ForEach(e => e.Delete(owner.Id));
+            }
+
             var ownerOccupation = new StaffInOrganization(newOwner.Id, changeOrganizationOwnerDto.Id, StaffRole.Owner);
+            ownerOccupation.Create(owner.Id);
             var createdOwnerOccupation = await staffInOrganizationRepository.CreateAsync(ownerOccupation);
-            
             newOwner.Occupations.Add(createdOwnerOccupation);
             await organizationRepository.SaveChangesAsync();
-            response.Data = await staffInOrganizationRepository.GetAsync(o => o.OrganizationId == changeOrganizationOwnerDto.Id && o.Role == StaffRole.Owner);
+
+            response.Data = await staffInOrganizationRepository.GetAsync(o => o.OrganizationId == changeOrganizationOwnerDto.Id && o.Role == StaffRole.Owner && o.Status != ObjectStatus.Deleted);
 
             return response;
         }

@@ -5,6 +5,7 @@
         Owner = 1,
         ExOwner,
         Manager,
-        Inferior
+        Inferior,
+        NoMoreWorkingInTheOrganization
     }
 }

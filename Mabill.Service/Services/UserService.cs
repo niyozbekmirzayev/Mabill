@@ -137,6 +137,8 @@ namespace Mabill.Service.Services
                 return response;
             }
 
+            response.Data = user;
+
             return response;
         }
 
