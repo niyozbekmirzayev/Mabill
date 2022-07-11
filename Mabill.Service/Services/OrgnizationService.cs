@@ -254,23 +254,23 @@ namespace Mabill.Service.Services
                 .FirstOrDefaultAsync();
 
             #region Data validation
-            if (owner == null) 
+            if (owner == null)
             {
                 response.Error = new BaseError(404, "User not found");
             }
 
-            if (owner.Occupations == null && !owner.Occupations.Any() && owner.Occupations.FirstOrDefault().Organization == null) 
+            if (owner.Occupations == null && !owner.Occupations.Any() && owner.Occupations.FirstOrDefault().Organization == null)
             {
                 response.Error = new BaseError(400, $"User has no owner role in organization");
 
                 return response;
             }
 
-            if (!String.IsNullOrEmpty(updateOrganizationDto.NewName) && updateOrganizationDto.NewName != owner.Occupations.FirstOrDefault().Organization.Name)
+            if (!String.IsNullOrEmpty(updateOrganizationDto.Name) && updateOrganizationDto.Name != owner.Occupations.FirstOrDefault().Organization.Name)
             {
                 var exsistOrganizationNames = organizationRepository.GetAll(o => o.Status != ObjectStatus.Deleted).Select(o => o.Name).ToList();
 
-                if(exsistOrganizationNames.Any(e => e == updateOrganizationDto.NewName)) 
+                if (exsistOrganizationNames.Any(e => e == updateOrganizationDto.Name))
                 {
                     response.Error = new BaseError(409, "New name of organization already exsists");
 

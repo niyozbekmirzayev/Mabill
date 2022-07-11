@@ -33,7 +33,6 @@ namespace Mabill.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             Console.WriteLine("---> Getting user....");

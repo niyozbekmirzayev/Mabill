@@ -60,12 +60,22 @@ namespace Mabill.API.Controllers
             return webHelperFunctions.SentResultWithStatusCode(result);
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Authorize]
         public async Task<IActionResult> ChangeOwner([FromQuery] ChangeOrganizationOwnerDto changeOrganizationOwnerDto)
         {
             Console.WriteLine("---> Changing owner....");
             var result = await organizationService.ChangeOwner(changeOrganizationOwnerDto);
+
+            return webHelperFunctions.SentResultWithStatusCode(result);
+        }
+
+        [HttpPatch]
+        [Authorize]
+        public async Task<IActionResult> Update([FromQuery] UpdateOrganizationDto updateOrganizationDto)
+        {
+            Console.WriteLine("---> Updating organization....");
+            var result = await organizationService.UpdateAysnc(updateOrganizationDto);
 
             return webHelperFunctions.SentResultWithStatusCode(result);
         }
